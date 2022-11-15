@@ -64,12 +64,14 @@ class _SignInContainerState extends State<_SignInContainer> {
                 flex: 2, child: Image.asset("assets/images/ic_hello_food.png")),
             Expanded(
                 flex: 3,
-                child: Column(
-                  children: [
-                    _buildInputAccountWidget(),
-                    _buildInputPasswordWidget(),
-                    _loginButton(MediaQuery.of(context).size.width*0.5)
-                  ],
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      _buildInputAccountWidget(),
+                      _buildInputPasswordWidget(),
+                      _loginButton(MediaQuery.of(context).size.width*0.5)
+                    ],
+                  ),
                 )),
             Expanded(flex: 1, child: _signUpWidget()),
           ],
