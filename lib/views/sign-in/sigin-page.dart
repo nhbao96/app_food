@@ -1,7 +1,10 @@
 import 'package:appp_sale_29092022/common/bases/base_widget.dart';
 import 'package:appp_sale_29092022/data/datasources/remote/api_request.dart';
 import 'package:appp_sale_29092022/data/respositories/authendication_respository.dart';
+import 'package:appp_sale_29092022/views/sign-in/sigin-bloc.dart';
+import 'package:appp_sale_29092022/views/sign-in/signin-event.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class SignInPage extends StatefulWidget {
   const SignInPage({Key? key}) : super(key: key);
@@ -15,7 +18,23 @@ class _SignInPageState extends State<SignInPage> {
   Widget build(BuildContext context) {
     return PageContainer(
       child: _SignInContainer(),
-      providers: [],
+      providers: [
+        Provider(create: (context) => ApiRequest() ),
+        ProxyProvider<ApiRequest,AuthendicationRespository>(
+          create: (context)=>AuthendicationRespository(),
+          update: (context,request,respository){
+            respository?.updateApiRequest(request);
+            return respository!;
+          },
+        ),
+        ProxyProvider<AuthendicationRespository,SignBloc>(
+          create: (context)=> SignBloc(),
+          update: (context,respository,bloc){
+            bloc?.updateRepository(respository);
+            return bloc!;
+          },
+        )
+      ],
       appBar: AppBar(
         title: Text("Sign-In"),
       ),
@@ -31,6 +50,8 @@ class _SignInContainer extends StatefulWidget {
 }
 
 class _SignInContainerState extends State<_SignInContainer> {
+  late SignBloc bloc;
+
   late TextEditingController _accountInputController;
   late TextEditingController _passwordInputController;
   late ApiRequest _apiRequest;
@@ -39,6 +60,9 @@ class _SignInContainerState extends State<_SignInContainer> {
   void initState() {
     // TODO: implement initState
     super.initState();
+
+    bloc = context.read();
+
     _accountInputController = TextEditingController();
     _accountInputController.text = "";
     _passwordInputController = TextEditingController();
@@ -113,7 +137,7 @@ class _SignInContainerState extends State<_SignInContainer> {
       margin: EdgeInsets.only(top: 20),
       child: ElevatedButton(
         onPressed: (){
-          _authendicationRespository.signIn(_accountInputController.text, _passwordInputController.text);
+          bloc.eventSink.add(SignInEvent(email: _accountInputController.text, password: _passwordInputController.text));
           _accountInputController.text = "";
           _passwordInputController.text = "";
         },

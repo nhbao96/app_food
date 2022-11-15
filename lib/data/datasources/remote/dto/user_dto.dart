@@ -27,4 +27,6 @@ class UserDto {
   String toString() {
     return 'UserDto{email: $email, name: $name, phone: $phone, userGroup: $userGroup, registerDate: $registerDate, token: $token}';
   }
+
+  static UserDto parser(Map<String,dynamic> json) => UserDto.fromJson(json);
 }

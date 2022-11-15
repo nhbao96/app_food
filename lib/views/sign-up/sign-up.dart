@@ -48,7 +48,7 @@ class _SignUpContainerState extends State<_SignUpContainer> {
             children: [
               Expanded(child: Container(
                   margin: EdgeInsets.symmetric(vertical: 10),
-                  child: Image.asset("assets/images/account.png")), flex: 1,),
+                  child: Image.asset("assets/images/ic_hello_food.png")), flex: 1,),
               Expanded(child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
