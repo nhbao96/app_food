@@ -24,4 +24,8 @@ class ApiRequest {
       "address": address
     });
   }
+
+  Future getProductRequest(){
+    return _dio.get(ApiConstant.PRODUCT);
+  }
 }

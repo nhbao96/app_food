@@ -34,11 +34,7 @@ class SignBloc extends BaseBloc{
          return;
        }
       UserDto userDto = resourceDTO.data!;
-       print("SignInBloc - UserDTO begin");
-       print( userDto.toString());
-      print("SignInBloc - UserDTO end");
       User userModel = User(userDto.email, userDto.name, userDto.phone, userDto.token);
-      userModel.toString();
       _signInStreamController.sink.add(userModel);
     }catch(e){
         print(e.toString());
