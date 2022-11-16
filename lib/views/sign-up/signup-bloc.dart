@@ -30,9 +30,15 @@ class SignUpBloc  extends BaseBloc{
 
   void handleSignUpEvent(SignUpEvent event) async {
     try{
-      AppResource<UserDto> resource = _authendicationRespository.signUp(event.email, event.password, event.name, event.phone, event.address);
+      AppResource<UserDto> resource = await _authendicationRespository.signUp(event.email, event.password, event.name, event.phone, event.address);
+      if(resource.data == null){
+        return;
+      }
+      UserDto userDto = resource.data!;
+      User userModel = User(userDto.email, userDto.name, userDto.phone, userDto.token);
+      _signUpStreamController.sink.add(userModel);
     }catch(e){
-
+      print(e.toString());
     }
   }
 
