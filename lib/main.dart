@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
         "sign-up" : (context) => SignUpPage(),
         "home-page" : (context) => HomeProductPage()
       },
-      initialRoute: "home-page",
+      initialRoute: "sign-in",
     );
   }
 }

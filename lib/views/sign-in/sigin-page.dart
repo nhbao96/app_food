@@ -1,4 +1,5 @@
 import 'package:appp_sale_29092022/common/bases/base_widget.dart';
+import 'package:appp_sale_29092022/common/utils/extension.dart';
 import 'package:appp_sale_29092022/common/widgets/loading_widget.dart';
 import 'package:appp_sale_29092022/common/widgets/progress_listener_widget.dart';
 import 'package:appp_sale_29092022/data/datasources/remote/api_request.dart';
@@ -21,17 +22,17 @@ class _SignInPageState extends State<SignInPage> {
     return PageContainer(
       child: _SignInContainer(),
       providers: [
-        Provider(create: (context) => ApiRequest() ),
-        ProxyProvider<ApiRequest,AuthendicationRespository>(
-          create: (context)=>AuthendicationRespository(),
-          update: (context,request,respository){
+        Provider(create: (context) => ApiRequest()),
+        ProxyProvider<ApiRequest, AuthendicationRespository>(
+          create: (context) => AuthendicationRespository(),
+          update: (context, request, respository) {
             respository?.updateApiRequest(request);
             return respository!;
           },
         ),
-        ProxyProvider<AuthendicationRespository,SignBloc>(
-          create: (context)=> SignBloc(),
-          update: (context,respository,bloc){
+        ProxyProvider<AuthendicationRespository, SignBloc>(
+          create: (context) => SignBloc(),
+          update: (context, respository, bloc) {
             bloc?.updateRepository(respository);
             return bloc!;
           },
@@ -58,6 +59,7 @@ class _SignInContainerState extends State<_SignInContainer> {
   late TextEditingController _passwordInputController;
   late ApiRequest _apiRequest;
   late AuthendicationRespository _authendicationRespository;
+
   @override
   void initState() {
     // TODO: implement initState
@@ -70,7 +72,7 @@ class _SignInContainerState extends State<_SignInContainer> {
     _passwordInputController = TextEditingController();
     _passwordInputController.text = "";
     _apiRequest = ApiRequest();
-    _authendicationRespository  = AuthendicationRespository();
+    _authendicationRespository = AuthendicationRespository();
     _authendicationRespository.updateApiRequest(_apiRequest);
   }
 
@@ -79,6 +81,7 @@ class _SignInContainerState extends State<_SignInContainer> {
     // TODO: implement didUpdateWidget
     super.didUpdateWidget(oldWidget);
   }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -89,15 +92,35 @@ class _SignInContainerState extends State<_SignInContainer> {
           child: Column(
             children: [
               Expanded(
-                  flex: 2, child: Image.asset("assets/images/ic_hello_food.png")),
+                  flex: 2,
+                  child: Image.asset("assets/images/ic_hello_food.png")),
               Expanded(
                   flex: 3,
                   child: SingleChildScrollView(
                     child: Column(
                       children: [
-                        _buildInputAccountWidget(),
-                        _buildInputPasswordWidget(),
-                        _loginButton(MediaQuery.of(context).size.width*0.5)
+                        _buildInputAccountWidget(_accountInputController),
+                        _buildInputPasswordWidget(_passwordInputController),
+                        _loginButton(MediaQuery.of(context).size.width * 0.5,
+                         onClick:    () {
+                          String email = _accountInputController.text.toString();
+                          String pass = _passwordInputController.text.toString();
+                          if (email.isEmpty || pass.isEmpty) {
+                            showMessage(
+                                context,
+                                "Message",
+                                "Input is not empty",
+                                [
+                                  ElevatedButton(onPressed: () {
+                                    Navigator.pop(context);
+                                  }, child: Text("ok"))
+                                ]
+                            );
+                            return;
+                          }
+
+                          bloc.eventSink.add(SignInEvent(email: email, password: pass));
+                        })
                       ],
                     ),
                   )),
@@ -105,72 +128,77 @@ class _SignInContainerState extends State<_SignInContainer> {
             ],
           ),
         ),
-        ProgressListenerWidget<SignBloc>(child: Container(), callback: (event){
-          switch(event.runtimeType){
-            case SignInSuccessEvent:
-              print("Login Success");
-              break;
-            case SignInFailEvent:
-              print("Login Failed");
-              break;
-            default:
-              break;
-          }
-
-        })
+        ProgressListenerWidget<SignBloc>(
+            child: Container(),
+            callback: (event) {
+              switch (event.runtimeType) {
+                case SignInSuccessEvent:
+                  _accountInputController.clear();
+                  _passwordInputController.clear();
+                  Navigator.pushReplacementNamed(context, "home-page");
+                  break;
+                case SignInFailEvent:
+                  _accountInputController.clear();
+                  _passwordInputController.clear();
+                  showMessage(context,"Notice",(event as SignInFailEvent).toString());
+                  break;
+                default:
+                  break;
+              }
+            })
       ],
     ));
   }
 
-  Widget _buildInputAccountWidget() {
+  Widget _buildInputAccountWidget(TextEditingController textEditingController) {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+      margin: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
       child: TextField(
-        controller: _accountInputController,
+        controller: textEditingController,
         decoration: InputDecoration(
-          border: OutlineInputBorder(borderSide: BorderSide(width: 2, color: Colors.blue)),
+          border: OutlineInputBorder(
+              borderSide: BorderSide(width: 2, color: Colors.blue)),
           hintText: 'Input a your account',
         ),
       ),
     );
   }
 
-  Widget _buildInputPasswordWidget() {
+  Widget _buildInputPasswordWidget(
+      TextEditingController textEditingController) {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 10),
       child: TextField(
-        controller: _passwordInputController,
+        controller: textEditingController,
         obscureText: true,
         decoration: InputDecoration(
-          border: OutlineInputBorder(borderSide: BorderSide(width: 2, color: Colors.blue)),
+          border: OutlineInputBorder(
+              borderSide: BorderSide(width: 2, color: Colors.blue)),
           hintText: 'Input a your password',
         ),
       ),
     );
   }
 
-  Widget _loginButton(double width){
+  Widget _loginButton(double width, {Function? onClick = null}) {
     return Container(
-      width: width ,
+      width: width,
       margin: EdgeInsets.only(top: 20),
       child: ElevatedButton(
-        onPressed: (){
-          bloc.eventSink.add(SignInEvent(email: _accountInputController.text, password: _passwordInputController.text));
-          _accountInputController.text = "";
-          _passwordInputController.text = "";
-        },
+        onPressed:()=>onClick?.call(),
         child: Text("Log in"),
       ),
     );
   }
 
-  Widget _signUpWidget(){
+  Widget _signUpWidget() {
     return Container(
-      child: TextButton(onPressed: (){
-        Navigator.pushNamed(context, "sign-up");
-        
-      }, child: Text("Sign up a new account?"),),
+      child: TextButton(
+        onPressed: () {
+          Navigator.pushNamed(context, "sign-up");
+        },
+        child: Text("Sign up a new account?"),
+      ),
     );
   }
 }
-
