@@ -31,7 +31,7 @@ class AuthendicationRespository {
     Completer<AppResource<UserDto>> completer = Completer();
     try{
       Response<dynamic> response = await _apiRequest.signUpRequest(email, password, name, phone, address);
-      AppResource<UserDto> resource = AppResource.fromJson(response.data, UserDto.fromJson);
+      AppResource<UserDto> resource = AppResource.fromJson(response.data, UserDto.parser);
       completer.complete(resource);
     }catch(e){
       completer.completeError(e.toString());

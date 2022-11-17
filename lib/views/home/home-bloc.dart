@@ -23,6 +23,7 @@ class HomeBloc extends BaseBloc {
     // TODO: implement dispatch
     switch (event.runtimeType) {
       case LoadListProducts:
+        print("HomeBloc :dispatch");
         handleLoadListProduct(event as LoadListProducts);
         break;
     }
@@ -31,9 +32,17 @@ class HomeBloc extends BaseBloc {
   void handleLoadListProduct(LoadListProducts event) async{
     try{
       AppResource<List<ProductDTO>> resourceDTO = await _productRespository.getProducts();
-      List<ProductDTO> listProductDTO = resourceDTO.data!;
-    }catch(e){
+      List<ProductDTO> listProductDTO = resourceDTO.data! ;
+      print("listProductDTO ${listProductDTO.toString()}");
+      List<ProductModel> listProducts = [];
+      for(int i = 0 ; i < listProductDTO.length; i++){
+        ProductModel productModel = ProductModel(listProductDTO[i].sId, listProductDTO[i].name, listProductDTO[i].address, listProductDTO[i].price, listProductDTO[i].img, listProductDTO[i].quantity, listProductDTO[i].gallery);
+        listProducts.add(productModel);
+        print("handleLoadListProduct : name =  ${productModel.name.toString()}");
+      }
 
+    }catch(e){
+      print(e.toString());
     }
   }
 

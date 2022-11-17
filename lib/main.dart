@@ -1,3 +1,4 @@
+import 'package:appp_sale_29092022/views/home/home-view.dart';
 import 'package:appp_sale_29092022/views/sign-in/sigin-page.dart';
 import 'package:appp_sale_29092022/views/sign-up/sign-up.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +18,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: SignUpPage(),
+      home: HomeProductPage(),
     );
   }
 }
