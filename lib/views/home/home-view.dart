@@ -1,10 +1,12 @@
 import 'package:appp_sale_29092022/common/bases/base_widget.dart';
 import 'package:appp_sale_29092022/data/datasources/remote/api_request.dart';
+import 'package:appp_sale_29092022/data/models/product.dart';
 import 'package:appp_sale_29092022/data/respositories/product_respository.dart';
 import 'package:appp_sale_29092022/views/home/home-bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../common/constants/api_constant.dart';
 import 'home-event.dart';
 
 class HomeProductPage extends StatefulWidget {
@@ -49,17 +51,44 @@ class _HomeProductContainerState extends State<_HomeProductContainer> {
     // TODO: implement initState
     super.initState();
     bloc = context.read();
-
+    bloc.eventSink.add(LoadListProducts());
   }
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: ElevatedButton(
-        onPressed: (){
-          bloc.eventSink.add(LoadListProducts());
-        },
-        child: Text("Click"),
-      ),
+    return SafeArea(
+        child: Container(
+          child: Stack(
+            children: [
+              StreamBuilder<List<ProductModel>>(
+                  initialData: const [],
+                  stream: bloc.ListProduct,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasError) {
+                      return Container(
+                        child: Center(child: Text("Data error")),
+                      );
+                    }
+                    if (snapshot.hasData && snapshot.data == []) {
+                      return Container();
+                    }
+                    return GridView.builder(
+                        gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                            maxCrossAxisExtent: 200,
+                            childAspectRatio: 3 / 2,
+                            crossAxisSpacing: 20,
+                            mainAxisSpacing: 20),
+                        itemCount: snapshot.data?.length ?? 0,
+                        itemBuilder: (context, index) {
+                          String img = snapshot.data?[index].img.toString() ??"";
+                          return Image.network(ApiConstant.BASE_URL + img);
+                        }
+                    );
+                  }
+              ),
+
+            ],
+          ),
+        )
     );
   }
 }

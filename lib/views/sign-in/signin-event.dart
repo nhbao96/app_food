@@ -9,3 +9,14 @@ class SignInEvent extends BaseEvent{
   // TODO: implement props
   List<Object?> get props => throw UnimplementedError();
 }
+
+class SignInSuccessEvent extends BaseEvent{
+  @override
+  // TODO: implement props
+  List<Object?> get props => [];
+}
+class SignInFailEvent extends BaseEvent{
+  @override
+  // TODO: implement props
+  List<Object?> get props => [];
+}

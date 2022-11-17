@@ -1,4 +1,6 @@
 import 'package:appp_sale_29092022/common/bases/base_widget.dart';
+import 'package:appp_sale_29092022/common/widgets/loading_widget.dart';
+import 'package:appp_sale_29092022/common/widgets/progress_listener_widget.dart';
 import 'package:appp_sale_29092022/data/datasources/remote/api_request.dart';
 import 'package:appp_sale_29092022/data/respositories/authendication_respository.dart';
 import 'package:appp_sale_29092022/views/sign-in/sigin-bloc.dart';
@@ -82,24 +84,40 @@ class _SignInContainerState extends State<_SignInContainer> {
     return SafeArea(
         child: Stack(
       children: [
-        Column(
-          children: [
-            Expanded(
-                flex: 2, child: Image.asset("assets/images/ic_hello_food.png")),
-            Expanded(
-                flex: 3,
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      _buildInputAccountWidget(),
-                      _buildInputPasswordWidget(),
-                      _loginButton(MediaQuery.of(context).size.width*0.5)
-                    ],
-                  ),
-                )),
-            Expanded(flex: 1, child: _signUpWidget()),
-          ],
-        )
+        LoadingWidget(
+          bloc: bloc,
+          child: Column(
+            children: [
+              Expanded(
+                  flex: 2, child: Image.asset("assets/images/ic_hello_food.png")),
+              Expanded(
+                  flex: 3,
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        _buildInputAccountWidget(),
+                        _buildInputPasswordWidget(),
+                        _loginButton(MediaQuery.of(context).size.width*0.5)
+                      ],
+                    ),
+                  )),
+              Expanded(flex: 1, child: _signUpWidget()),
+            ],
+          ),
+        ),
+        ProgressListenerWidget<SignBloc>(child: Container(), callback: (event){
+          switch(event.runtimeType){
+            case SignInSuccessEvent:
+              print("Login Success");
+              break;
+            case SignInFailEvent:
+              print("Login Failed");
+              break;
+            default:
+              break;
+          }
+
+        })
       ],
     ));
   }
@@ -148,7 +166,10 @@ class _SignInContainerState extends State<_SignInContainer> {
 
   Widget _signUpWidget(){
     return Container(
-      child: TextButton(onPressed: (){}, child: Text("Sign up a new account?"),),
+      child: TextButton(onPressed: (){
+        Navigator.pushNamed(context, "sign-up");
+        
+      }, child: Text("Sign up a new account?"),),
     );
   }
 }

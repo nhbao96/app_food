@@ -28,6 +28,7 @@ class SignBloc extends BaseBloc{
     }
   }
   void handleSignInEvent(SignInEvent event) async {
+    loadingSink.add(true);
     try{
       AppResource<UserDto> resourceDTO = await _authendicationRespository.signIn(event.email, event.password);
        if(resourceDTO.data == null){
@@ -36,8 +37,12 @@ class SignBloc extends BaseBloc{
       UserDto userDto = resourceDTO.data!;
       User userModel = User(userDto.email, userDto.name, userDto.phone, userDto.token);
       _signInStreamController.sink.add(userModel);
+      loadingSink.add(false);
+      progressSink.add(SignInSuccessEvent());
     }catch(e){
         print(e.toString());
+        loadingSink.add(false);
+        progressSink.add(SignInFailEvent());
     }
   }
 

@@ -33,11 +33,11 @@ class HomeBloc extends BaseBloc {
     try{
       AppResource<List<ProductDTO>> resourceDTO = await _productRespository.getProducts();
       List<ProductDTO> listProductDTO = resourceDTO.data! ;
-      print("listProductDTO ${listProductDTO.toString()}");
       List<ProductModel> listProducts = [];
       for(int i = 0 ; i < listProductDTO.length; i++){
         ProductModel productModel = ProductModel(listProductDTO[i].sId, listProductDTO[i].name, listProductDTO[i].address, listProductDTO[i].price, listProductDTO[i].img, listProductDTO[i].quantity, listProductDTO[i].gallery);
         listProducts.add(productModel);
+        _streamController.sink.add(listProducts);
         print("handleLoadListProduct : name =  ${productModel.name.toString()}");
       }
 

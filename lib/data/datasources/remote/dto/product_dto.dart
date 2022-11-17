@@ -47,7 +47,7 @@ class ProductDTO{
     return 'ProductDTO{sId: $sId, name: $name, address: $address, price: $price, img: $img, quantity: $quantity, gallery: $gallery, dateCreated: $dateCreated}';
   }
 
-  static List<ProductDTO> parser(Map<String,dynamic> json) {
+  static List<ProductDTO> parser(List<dynamic> json) {
     return (json as List).map((e) => ProductDTO.fromJson(e)).toList();
   }
 }
