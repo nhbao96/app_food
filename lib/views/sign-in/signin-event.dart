@@ -11,6 +11,11 @@ class SignInEvent extends BaseEvent{
 }
 
 class SignInSuccessEvent extends BaseEvent{
+  String token;
+
+  String getToken() => token;
+
+  SignInSuccessEvent({required this.token });
   @override
   // TODO: implement props
   List<Object?> get props => [];

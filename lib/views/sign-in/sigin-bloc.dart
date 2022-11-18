@@ -38,7 +38,7 @@ class SignBloc extends BaseBloc{
       User userModel = User(userDto.email, userDto.name, userDto.phone, userDto.token);
       _signInStreamController.sink.add(userModel);
       loadingSink.add(false);
-      progressSink.add(SignInSuccessEvent());
+      progressSink.add(SignInSuccessEvent(token: userModel.token));
     }catch(e){
         print(e.toString());
         loadingSink.add(false);

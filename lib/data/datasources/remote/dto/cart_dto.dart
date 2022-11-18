@@ -18,7 +18,7 @@ class CartDTO{
   }
 
   static CartDTO parser(Map<String,dynamic> json){
-    return CartDTO.parser(json);
+    return CartDTO.fromJson(json);
   }
 
 }

@@ -135,7 +135,7 @@ class _SignInContainerState extends State<_SignInContainer> {
                 case SignInSuccessEvent:
                   _accountInputController.clear();
                   _passwordInputController.clear();
-                  Navigator.pushReplacementNamed(context, "home-page");
+                  Navigator.pushReplacementNamed(context, "home-page", arguments: (event as SignInSuccessEvent).getToken().toString());
                   break;
                 case SignInFailEvent:
                   _accountInputController.clear();

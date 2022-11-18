@@ -38,7 +38,6 @@ class HomeBloc extends BaseBloc {
         ProductModel productModel = ProductModel(listProductDTO[i].sId, listProductDTO[i].name, listProductDTO[i].address, listProductDTO[i].price, listProductDTO[i].img, listProductDTO[i].quantity, listProductDTO[i].gallery);
         listProducts.add(productModel);
         _streamController.sink.add(listProducts);
-        print("handleLoadListProduct : name =  ${productModel.name.toString()}");
       }
 
     }catch(e){
