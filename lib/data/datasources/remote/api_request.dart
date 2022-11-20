@@ -31,7 +31,6 @@ class ApiRequest {
 
   Future getCart(String token) {
     BaseOptions options = _dio.options;
-
     return _dio.get(
       ApiConstant.CART,
       options: Options(headers: {

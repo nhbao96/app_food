@@ -105,6 +105,8 @@ class _SignInContainerState extends State<_SignInContainer> {
                          onClick:    () {
                           String email = _accountInputController.text.toString();
                           String pass = _passwordInputController.text.toString();
+                          email = "baonh@gmail.com";
+                          pass ="123456789";
                           if (email.isEmpty || pass.isEmpty) {
                             showMessage(
                                 context,

@@ -8,6 +8,7 @@ import 'package:appp_sale_29092022/data/models/cart.dart';
 import 'package:appp_sale_29092022/views/cart/cart-event.dart';
 
 import '../../common/bases/base_bloc.dart';
+import '../../data/models/product.dart';
 import '../../data/respositories/cart_respository.dart';
 
 class CartBloc extends BaseBloc {
@@ -43,8 +44,19 @@ class CartBloc extends BaseBloc {
         throw "data null";
       }
       CartDTO cartDTO = response.data!;
-      CartModel cartModel = CartModel(cartDTO.id, cartDTO.idUser, cartDTO.price, cartDTO.dateCreated);
-      cartModel.setProduct(cartDTO.products??[]);
+      List<dynamic> productResponse = cartDTO.products!;
+      List<ProductDTO> productsDTO = ProductDTO.parser(productResponse);
+      List<ProductModel> listProducts = [];
+      for(int i = 0 ; i < productsDTO.length; i++){
+        ProductModel productModel = ProductModel(productsDTO[i].sId, productsDTO[i].name, productsDTO[i].address, productsDTO[i].price, productsDTO[i].img, productsDTO[i].quantity, productsDTO[i].gallery);
+        listProducts.add(productModel);
+      }
+      print("cartbloc : listProducts : ${listProducts.toString()}");
+      CartModel cartModel = CartModel(cartDTO.id,listProducts, cartDTO.idUser, cartDTO.price, cartDTO.dateCreated);
+
+
+      print('handleLoadCart : cartModel : ${cartModel.toString()}');
+      _streamController.sink.add(cartModel);
     } catch (e) {
       print(e.toString());
     }

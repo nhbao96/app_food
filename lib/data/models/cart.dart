@@ -9,8 +9,9 @@ class CartModel {
   int? _price;
   String? _dateCreated;
 
+
   CartModel(
-      this._sId, this._idUser, this._price, this._dateCreated);
+      this._sId, this._products, this._idUser, this._price, this._dateCreated);
 
   String get dateCreated => _dateCreated ?? "";
 
@@ -22,11 +23,20 @@ class CartModel {
 
   String get sId => _sId ?? "";
 
+  @override
+  String toString() {
+    return 'CartModel{_sId: $_sId, _products: $_products, _idUser: $_idUser, _price: $_price, _dateCreated: $_dateCreated}';
+  }
+
   void setProduct(List<ProductDTO> listProductDTO){
-    products.clear();
+    print("cartModel length = ${listProductDTO.length} ** products lenght = ${_products?.length}");
+
     for(int i = 0 ; i < listProductDTO.length; i++){
+      print("-----setProduct");
       ProductModel productModel = ProductModel(listProductDTO[i].sId, listProductDTO[i].name, listProductDTO[i].address, listProductDTO[i].price, listProductDTO[i].img, listProductDTO[i].quantity, listProductDTO[i].gallery);
-      products.add(productModel);
+      _products?.add(productModel);
     }
+
+    print("cartModel length = ${listProductDTO.length} ** products lenght = ${_products?.length}");
   }
 }
