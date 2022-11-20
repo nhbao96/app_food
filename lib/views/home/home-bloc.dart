@@ -30,6 +30,7 @@ class HomeBloc extends BaseBloc {
   }
 
   void handleLoadListProduct(LoadListProducts event) async{
+    loadingSink.add(true);
     try{
       AppResource<List<ProductDTO>> resourceDTO = await _productRespository.getProducts();
       List<ProductDTO> listProductDTO = resourceDTO.data! ;
@@ -37,10 +38,11 @@ class HomeBloc extends BaseBloc {
       for(int i = 0 ; i < listProductDTO.length; i++){
         ProductModel productModel = ProductModel(listProductDTO[i].sId, listProductDTO[i].name, listProductDTO[i].address, listProductDTO[i].price, listProductDTO[i].img, listProductDTO[i].quantity, listProductDTO[i].gallery);
         listProducts.add(productModel);
-        _streamController.sink.add(listProducts);
       }
-
+      loadingSink.add(false);
+      _streamController.sink.add(listProducts);
     }catch(e){
+      loadingSink.add(false);
       print(e.toString());
     }
   }

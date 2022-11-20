@@ -1,3 +1,4 @@
+import 'package:appp_sale_29092022/views/cart/cart-view.dart';
 import 'package:appp_sale_29092022/views/home/home-view.dart';
 import 'package:appp_sale_29092022/views/sign-in/sigin-page.dart';
 import 'package:appp_sale_29092022/views/sign-up/sign-up.dart';
@@ -21,7 +22,8 @@ class MyApp extends StatelessWidget {
       routes: {
         "sign-in" : (context) => SignInPage(),
         "sign-up" : (context) => SignUpPage(),
-        "home-page" : (context) => HomeProductPage()
+        "home-page" : (context) => HomeProductPage(),
+        "cart-page" :(context)=> CartView()
       },
       initialRoute: "sign-in",
     );

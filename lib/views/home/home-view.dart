@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../common/constants/api_constant.dart';
+import '../../common/widgets/loading_widget.dart';
 import 'home-event.dart';
 
 class HomeProductPage extends StatefulWidget {
@@ -65,7 +66,9 @@ class _HomeProductPageState extends State<HomeProductPage> {
                           color: Colors.black,
                         )),
                     IconButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.pushNamed(context, "cart-page", arguments: args);
+                        },
                         icon: Icon(
                           Icons.shopping_cart,
                           color: Colors.orange,
@@ -104,33 +107,36 @@ class _HomeProductContainerState extends State<_HomeProductContainer> {
         child: Container(
       child: Stack(
         children: [
-          StreamBuilder<List<ProductModel>>(
-              initialData: const [],
-              stream: bloc.ListProduct,
-              builder: (context, snapshot) {
-                if (snapshot.hasError) {
-                  return Container(
-                    child: Center(child: Text("Data error")),
-                  );
-                }
-                if (snapshot.hasData && snapshot.data == []) {
-                  return Container();
-                }
-                return ListView.builder(
-                    padding: const EdgeInsets.all(8),
-                    itemCount: snapshot.data?.length ?? 0,
-                    itemBuilder: (context, index) {
-                      String img = snapshot.data?[index].img.toString() ?? "";
-                      String title =
-                          snapshot.data?[index].name.toString() ?? "";
-                      String address =
-                          snapshot.data?[index].address.toString() ?? "";
-                      String price =
-                          snapshot.data?[index].price.toString() ?? "";
+          LoadingWidget(
+            bloc: bloc,
+            child: StreamBuilder<List<ProductModel>>(
+                initialData: const [],
+                stream: bloc.ListProduct,
+                builder: (context, snapshot) {
+                  if (snapshot.hasError) {
+                    return Container(
+                      child: Center(child: Text("Data error")),
+                    );
+                  }
+                  if (snapshot.hasData && snapshot.data == []) {
+                    return Center(child: ReloadButton(),);
+                  }
+                  return ListView.builder(
+                      padding: const EdgeInsets.all(8),
+                      itemCount: snapshot.data?.length ?? 0,
+                      itemBuilder: (context, index) {
+                        String img = snapshot.data?[index].img.toString() ?? "";
+                        String title =
+                            snapshot.data?[index].name.toString() ?? "";
+                        String address =
+                            snapshot.data?[index].address.toString() ?? "";
+                        String price =
+                            snapshot.data?[index].price.toString() ?? "";
 
-                      return ProductWidget(context, img, title, address, price);
-                    });
-              }),
+                        return ProductWidget(context, img, title, address, price);
+                      });
+                }),
+          ),
         ],
       ),
     ));
@@ -233,5 +239,11 @@ class _HomeProductContainerState extends State<_HomeProductContainer> {
         ),
       ),
     );
+  }
+
+  Widget ReloadButton(){
+    return ElevatedButton(onPressed: (){
+      bloc.eventSink.add(LoadListProducts());
+    }, child: Text("Reload"));
   }
 }

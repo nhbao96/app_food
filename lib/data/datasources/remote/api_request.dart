@@ -4,28 +4,39 @@ import 'package:dio/dio.dart';
 
 class ApiRequest {
   late Dio _dio;
-  ApiRequest(){
+
+  ApiRequest() {
     _dio = DioClient.instance.dio;
   }
 
-  Future signInRequest(String email, String password){
-    return _dio.post(ApiConstant.SIGN_IN,data: {
-      "email" : email,
-      "password" : password
-    });
+  Future signInRequest(String email, String password) {
+    return _dio.post(ApiConstant.SIGN_IN,
+        data: {"email": email, "password": password});
   }
 
-  Future signUpRequest(String email, String password, String name, String phone, String address){
+  Future signUpRequest(String email, String password, String name, String phone,
+      String address) {
     return _dio.post(ApiConstant.SIGN_UP, data: {
-      "email" : email,
-      "name" : name,
-      "password" : password,
-      "phone" : phone,
+      "email": email,
+      "name": name,
+      "password": password,
+      "phone": phone,
       "address": address
     });
   }
 
-  Future getProductRequest(){
+  Future getProductRequest() {
     return _dio.get(ApiConstant.PRODUCT);
+  }
+
+  Future getCart(String token) {
+    BaseOptions options = _dio.options;
+
+    return _dio.get(
+      ApiConstant.CART,
+      options: Options(headers: {
+        "authorization": "Bearer ${token}",
+      }),
+    );
   }
 }
