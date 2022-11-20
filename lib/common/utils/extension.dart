@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/single_child_widget.dart';
 
 void showMessage(
@@ -32,4 +33,9 @@ bool isNotEmpty(List<String> data) {
     }
   }
   return true;
+}
+
+String convertToMoney(int value){
+  String result  =  NumberFormat.currency(locale: 'eu',symbol: 'VND',decimalDigits : 0).format(value);
+  return result;
 }

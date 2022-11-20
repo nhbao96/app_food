@@ -1,4 +1,5 @@
 import 'package:appp_sale_29092022/common/bases/base_widget.dart';
+import 'package:appp_sale_29092022/common/utils/extension.dart';
 import 'package:appp_sale_29092022/data/datasources/remote/api_request.dart';
 import 'package:appp_sale_29092022/data/models/product.dart';
 import 'package:appp_sale_29092022/data/respositories/product_respository.dart';
@@ -17,10 +18,9 @@ class HomeProductPage extends StatefulWidget {
 }
 
 class _HomeProductPageState extends State<HomeProductPage> {
-
   @override
   Widget build(BuildContext context) {
-    String args = ModalRoute.of(context)?.settings.arguments.toString() ??"";
+    String args = ModalRoute.of(context)?.settings.arguments.toString() ?? "";
     print("_HomeProductPageState : token = $args");
     return PageContainer(
         child: _HomeProductContainer(),
@@ -140,79 +140,92 @@ class _HomeProductContainerState extends State<_HomeProductContainer> {
       String address, String price) {
     double width = MediaQuery.of(context).size.width;
     return Container(
-      width: width*0.8,
-      height: 100,
+      width: width * 0.98,
+      height: 120,
       child: Card(
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Expanded(
-              flex: 1,
+            Flexible(
               child: Image.network(
                 ApiConstant.BASE_URL + img,
+                width: 175,
               ),
             ),
-            Expanded(
-              flex: 2,
+            Flexible(
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Expanded(
-                      child: Container(
-                        margin: EdgeInsets.symmetric(horizontal: 10,vertical: 5),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Expanded(
-                              child: Text(title,
-                                  overflow: TextOverflow.ellipsis,
-                                  maxLines: 1,
-                                  softWrap: false,
-                                  style: TextStyle(
-                                      color: Colors.red,
-                                      fontWeight: FontWeight.bold)),
-                            ),
-                            Expanded(
-                              child: Text(
-                                address,
-                                maxLines: 1,
-                                softWrap: false,
-                                style: TextStyle(color: Colors.grey),
+                  Flexible(
+                    child: Container(
+                      margin: EdgeInsets.only(left: 10, top: 5, bottom: 10),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            // margin: EdgeInsets.symmetric(vertical: 10),
+                            child: Text(title.toUpperCase(),
                                 overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                            Expanded(
-                              child: Text(
-                                price,
                                 maxLines: 1,
                                 softWrap: false,
                                 style: TextStyle(
-                                    color: Colors.black, fontStyle: FontStyle.italic),
-                                overflow: TextOverflow.ellipsis,
+                                    fontSize: 12.6,
+                                    color: Colors.red,
+                                    fontWeight: FontWeight.bold)),
+                          ),
+                          Container(
+                            margin: EdgeInsets.symmetric(vertical: 0),
+                            child: Text(
+                              address,
+                              maxLines: 1,
+                              softWrap: false,
+                              style:
+                                  TextStyle(fontSize: 12, color: Colors.grey),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                          Container(
+                            //  margin: EdgeInsets.symmetric(vertical: 10),
+                            child: Text(
+                              convertToMoney(int.parse(price)),
+                              maxLines: 1,
+                              softWrap: false,
+                              style: TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.black,
+                                  fontStyle: FontStyle.italic),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                          Container(
+                            child: SizedBox(
+                              width: 60,
+                              height: 20,
+                              child: ElevatedButton(
+                                onPressed: () {},
+                                style: ButtonStyle(
+    backgroundColor: MaterialStateProperty.all<Color>(Colors.deepOrange),
+                                    shape: MaterialStateProperty.all<
+                                            RoundedRectangleBorder>(
+                                        RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(18.0),
+                                            side: BorderSide(
+                                                color: Colors.deepOrange)))),
+                                child: Text(
+                                  "ADD",
+                                  style: TextStyle(fontSize: 10,),
+                                ),
                               ),
                             ),
-                          ],
-                        ),
+                          )
+                        ],
                       ),
-                      flex: 3),
-                  Expanded(
-                   child: Row(
-                     mainAxisAlignment: MainAxisAlignment.start,
-                     crossAxisAlignment: CrossAxisAlignment.start,
-                     children: [
-                       Container(
-                         child: ElevatedButton(onPressed: (){}, child: Text("Add"),style: ButtonStyle(backgroundColor:MaterialStateProperty.all(Colors.orange) ,
-                             shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                                 RoundedRectangleBorder(
-                                     borderRadius: BorderRadius.circular(18.0),
-                                     side: BorderSide(color: Colors.orange),
-                                 )
-                             )
-                         )),
-                       )
-                     ],
-                   ),
-                  )
+                    ),
+                  ),
                 ],
               ),
             )
