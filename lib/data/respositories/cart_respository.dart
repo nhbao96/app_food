@@ -25,4 +25,16 @@ class CartRespository{
     }
     return completer.future;
   }
+
+  Future<AppResource<CartDTO>> updateCart(String idCart, String idProduct, int quantity) async{
+    Completer<AppResource<CartDTO>> completer = Completer();
+    try{
+      Response<dynamic> response = await _apiRequest.updateCart(idCart, idProduct, quantity);
+      AppResource<CartDTO> resource = AppResource.fromJson(response.data, CartDTO.parser);
+      completer.complete(resource);
+    }catch(e){
+      completer.completeError(e.toString());
+    }
+    return completer.future;
+  }
 }

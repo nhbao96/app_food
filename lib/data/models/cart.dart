@@ -25,7 +25,7 @@ class CartModel {
 
   @override
   String toString() {
-    return 'CartModel{_sId: $_sId, _products: $_products, _idUser: $_idUser, _price: $_price, _dateCreated: $_dateCreated}';
+    return 'CartModel{_sId: $_sId, _products-length: ${_products?.length}, _idUser: $_idUser, _price: $_price, _dateCreated: $_dateCreated}';
   }
 
   void setProduct(List<ProductDTO> listProductDTO){
