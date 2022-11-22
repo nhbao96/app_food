@@ -1,8 +1,13 @@
 import 'package:appp_sale_29092022/common/bases/base_widget.dart';
 import 'package:appp_sale_29092022/common/utils/extension.dart';
+import 'package:appp_sale_29092022/common/widgets/progress_listener_widget.dart';
 import 'package:appp_sale_29092022/data/datasources/remote/api_request.dart';
+import 'package:appp_sale_29092022/data/models/cart.dart';
 import 'package:appp_sale_29092022/data/models/product.dart';
+import 'package:appp_sale_29092022/data/respositories/cart_respository.dart';
 import 'package:appp_sale_29092022/data/respositories/product_respository.dart';
+import 'package:appp_sale_29092022/views/cart/cart-bloc.dart';
+import 'package:appp_sale_29092022/views/cart/cart-event.dart';
 import 'package:appp_sale_29092022/views/home/home-bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -40,6 +45,20 @@ class _HomeProductPageState extends State<HomeProductPage> {
               homeBloc?.updateRespository(productRespository);
               return homeBloc!;
             },
+          ),
+          ProxyProvider<ApiRequest, CartRespository>(
+            create: (context) => CartRespository(),
+            update: (context, apiRequest, cartRepo) {
+              cartRepo?.updateApiRequest(apiRequest);
+              return cartRepo!;
+            },
+          ),
+          ProxyProvider<CartRespository, CartBloc>(
+            create: (context) => CartBloc(),
+            update: (context, cartRespository, cartBloc) {
+              cartBloc?.updateRepository(cartRespository);
+              return cartBloc!;
+            },
           )
         ],
         appBar: AppBar(
@@ -67,12 +86,25 @@ class _HomeProductPageState extends State<HomeProductPage> {
                         )),
                     IconButton(
                         onPressed: () {
-                          Navigator.pushNamed(context, "cart-page", arguments: args);
+                          Navigator.pushNamed(context, "cart-page",
+                              arguments: args);
                         },
                         icon: Icon(
                           Icons.shopping_cart,
                           color: Colors.orange,
-                        ))
+                        )),
+                    ProgressListenerWidget<CartBloc>(
+                        child: Container() ,
+                        callback: (event){
+                          switch(event.runtimeType){
+                            case GetCartSuccess:
+
+                              print("----> ProgressListenerWidget appBar id = ${(event as GetCartSuccess).idCart}");
+                              break;
+                            default:
+                              break;
+                          }
+                        })
                   ],
                 ),
                 flex: 2,
@@ -92,17 +124,26 @@ class _HomeProductContainer extends StatefulWidget {
 
 class _HomeProductContainerState extends State<_HomeProductContainer> {
   late HomeBloc bloc;
-
+  late CartBloc cartBloc;
+  late String _token;
+  late String _cartId;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     bloc = context.read();
     bloc.eventSink.add(LoadListProducts());
+
+    cartBloc = context.read();
   }
 
   @override
   Widget build(BuildContext context) {
+    _token = ModalRoute.of(context)?.settings.arguments.toString() ?? "";
+    if (!_token.isEmpty) {
+      cartBloc.eventSink.add(CartEvent(token: _token));
+    }
+
     return SafeArea(
         child: Container(
       child: Stack(
@@ -119,7 +160,9 @@ class _HomeProductContainerState extends State<_HomeProductContainer> {
                     );
                   }
                   if (snapshot.hasData && snapshot.data == []) {
-                    return Center(child: ReloadButton(),);
+                    return Center(
+                      child: ReloadButton(),
+                    );
                   }
                   return ListView.builder(
                       padding: const EdgeInsets.all(8),
@@ -133,10 +176,23 @@ class _HomeProductContainerState extends State<_HomeProductContainer> {
                         String price =
                             snapshot.data?[index].price.toString() ?? "";
 
-                        return ProductWidget(context, img, title, address, price);
+                        return ProductWidget(
+                            context, img, title, address, price);
                       });
                 }),
           ),
+          ProgressListenerWidget<CartBloc>(
+              child: Container() ,
+              callback: (event){
+                switch(event.runtimeType){
+                  case GetCartSuccess:
+                    _cartId = (event as GetCartSuccess).idCart;
+                    print("----> ProgressListenerWidget idCart = $_cartId");
+                    break;
+                  default:
+                    break;
+                }
+              })
         ],
       ),
     ));
@@ -213,7 +269,9 @@ class _HomeProductContainerState extends State<_HomeProductContainer> {
                               child: ElevatedButton(
                                 onPressed: () {},
                                 style: ButtonStyle(
-    backgroundColor: MaterialStateProperty.all<Color>(Colors.deepOrange),
+                                    backgroundColor:
+                                        MaterialStateProperty.all<Color>(
+                                            Colors.deepOrange),
                                     shape: MaterialStateProperty.all<
                                             RoundedRectangleBorder>(
                                         RoundedRectangleBorder(
@@ -223,7 +281,9 @@ class _HomeProductContainerState extends State<_HomeProductContainer> {
                                                 color: Colors.deepOrange)))),
                                 child: Text(
                                   "ADD",
-                                  style: TextStyle(fontSize: 10,),
+                                  style: TextStyle(
+                                    fontSize: 10,
+                                  ),
                                 ),
                               ),
                             ),
@@ -241,9 +301,11 @@ class _HomeProductContainerState extends State<_HomeProductContainer> {
     );
   }
 
-  Widget ReloadButton(){
-    return ElevatedButton(onPressed: (){
-      bloc.eventSink.add(LoadListProducts());
-    }, child: Text("Reload"));
+  Widget ReloadButton() {
+    return ElevatedButton(
+        onPressed: () {
+          bloc.eventSink.add(LoadListProducts());
+        },
+        child: Text("Reload"));
   }
 }

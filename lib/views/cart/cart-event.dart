@@ -9,6 +9,19 @@ class CartEvent extends BaseEvent{
   CartEvent({ required this.token});
 }
 
+class GetCartSuccess extends BaseEvent{
+  String _idCart;
+
+  String get idCart => _idCart;
+
+  GetCartSuccess(this._idCart);
+
+  @override
+  // TODO: implement props
+  List<Object?> get props => [];
+
+}
+
 class UpdateCartEvent extends BaseEvent{
   String _idCart;
   String _idProduct;

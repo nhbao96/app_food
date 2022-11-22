@@ -61,6 +61,7 @@ class CartBloc extends BaseBloc {
       CartModel cartModel = CartModel(cartDTO.id,listProducts, cartDTO.idUser, cartDTO.price, cartDTO.dateCreated);
       loadingSink.add(false);
       _streamController.sink.add(cartModel);
+      progressSink.add(GetCartSuccess(cartDTO.id.toString()));
     } catch (e) {
       print(e.toString());
      // loadingSink.add(false);
