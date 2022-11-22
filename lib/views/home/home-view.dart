@@ -9,6 +9,7 @@ import 'package:appp_sale_29092022/data/respositories/product_respository.dart';
 import 'package:appp_sale_29092022/views/cart/cart-bloc.dart';
 import 'package:appp_sale_29092022/views/cart/cart-event.dart';
 import 'package:appp_sale_29092022/views/home/home-bloc.dart';
+import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -62,9 +63,9 @@ class _HomeProductPageState extends State<HomeProductPage> {
           )
         ],
         appBar: AppBar(
-          title: Row(
-            children: [
-              Expanded(
+          actions: [
+            Expanded(
+              child: Center(
                 child: Text(
                   "Food",
                   style: TextStyle(
@@ -72,46 +73,66 @@ class _HomeProductPageState extends State<HomeProductPage> {
                       fontWeight: FontWeight.bold,
                       fontSize: 25),
                 ),
-                flex: 1,
               ),
-              Expanded(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    IconButton(
-                        onPressed: () {},
-                        icon: Icon(
-                          Icons.stars_rounded,
-                          color: Colors.black,
-                        )),
-                    IconButton(
-                        onPressed: () {
-                          Navigator.pushNamed(context, "cart-page",
-                              arguments: args);
-                        },
-                        icon: Icon(
-                          Icons.shopping_cart,
-                          color: Colors.orange,
-                        )),
-                    ProgressListenerWidget<CartBloc>(
-                        child: Container() ,
-                        callback: (event){
-                          switch(event.runtimeType){
-                            case GetCartSuccess:
-
-                              print("----> ProgressListenerWidget appBar id = ${(event as GetCartSuccess).idCart}");
-                              break;
-                            default:
-                              break;
+              flex: 1,
+            ),
+            Expanded(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  IconButton(
+                      onPressed: () {},
+                      icon: Icon(
+                        Icons.stars_rounded,
+                        color: Colors.black,
+                      )),
+                  Consumer<CartBloc>(
+                    builder: (context, bloc, child){
+                      return StreamBuilder<CartModel>(
+                          initialData: null,
+                          stream: bloc.streamController,
+                          builder: (context, snapshot) {
+                            if (snapshot.hasError || snapshot.data == null || snapshot.data?.products.isEmpty == true) {
+                              return Container();
+                            }
+                            int count = snapshot.data?.products.length ?? 0;
+                            return shoppingCartWidget(args,count);
                           }
-                        })
-                  ],
-                ),
-                flex: 2,
-              )
-            ],
-          ),
+                      );
+                    },
+                  )
+
+                ],
+              ),
+              flex: 2,
+            )
+          ],
         ));
+  }
+
+  Widget shoppingCartWidget(String token, int count){
+    return Stack(
+      children: [
+        IconButton(
+            onPressed: () {
+              Navigator.pushNamed(context, "cart-page",
+                  arguments: token);
+            },
+            icon: Icon(
+              Icons.shopping_cart,
+              color: Colors.orange,
+            )),
+        Container(
+          margin: EdgeInsets.only(right: 10, top: 10),
+          child: Container(
+            child: Badge(
+              badgeContent: Text(count.toString(), style: const TextStyle(color: Colors.white),),
+              child: Icon(Icons.shopping_cart_outlined),
+            ),
+          ),
+        ),
+      ],
+    );
   }
 }
 
@@ -127,6 +148,8 @@ class _HomeProductContainerState extends State<_HomeProductContainer> {
   late CartBloc cartBloc;
   late String _token;
   late String _cartId;
+
+
   @override
   void initState() {
     // TODO: implement initState
@@ -164,6 +187,7 @@ class _HomeProductContainerState extends State<_HomeProductContainer> {
                       child: ReloadButton(),
                     );
                   }
+
                   return ListView.builder(
                       padding: const EdgeInsets.all(8),
                       itemCount: snapshot.data?.length ?? 0,
@@ -175,31 +199,24 @@ class _HomeProductContainerState extends State<_HomeProductContainer> {
                             snapshot.data?[index].address.toString() ?? "";
                         String price =
                             snapshot.data?[index].price.toString() ?? "";
-
+                        String idProduct = snapshot.data?[index].id.toString() ?? "";
                         return ProductWidget(
-                            context, img, title, address, price);
+                            context, img, title, address, price,idProduct);
                       });
                 }),
           ),
-          ProgressListenerWidget<CartBloc>(
-              child: Container() ,
-              callback: (event){
-                switch(event.runtimeType){
-                  case GetCartSuccess:
-                    _cartId = (event as GetCartSuccess).idCart;
-                    print("----> ProgressListenerWidget idCart = $_cartId");
-                    break;
-                  default:
-                    break;
-                }
-              })
+          ProgressListenerWidget<CartBloc>(child: Container(), callback: (event){
+            if(event.runtimeType ==  GetCartSuccess){
+              _cartId = (event as GetCartSuccess).idCart;
+            }
+          })
         ],
       ),
     ));
   }
 
   Widget ProductWidget(BuildContext context, String img, String title,
-      String address, String price) {
+      String address, String price, String idProduct) {
     double width = MediaQuery.of(context).size.width;
     return Container(
       width: width * 0.98,
@@ -267,7 +284,9 @@ class _HomeProductContainerState extends State<_HomeProductContainer> {
                               width: 60,
                               height: 20,
                               child: ElevatedButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  addToCart(_cartId, idProduct, 1);
+                                },
                                 style: ButtonStyle(
                                     backgroundColor:
                                         MaterialStateProperty.all<Color>(
@@ -299,6 +318,10 @@ class _HomeProductContainerState extends State<_HomeProductContainer> {
         ),
       ),
     );
+  }
+
+  void addToCart(String idCart, String idProduct, int quantity){
+    cartBloc.eventSink.add(UpdateCartEvent(idCart, idProduct, quantity));
   }
 
   Widget ReloadButton() {

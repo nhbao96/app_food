@@ -108,30 +108,31 @@ class _CartContainerState extends State<_CartContainer> {
                               context, id, img, name, price, quantity);
                         }),
                     Column(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
-                        Expanded(
-                          flex: 5,
-                          child: Container(
-                            margin: EdgeInsets.symmetric(horizontal: 30),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text("Total money :"),
-                                Text(convertToMoney(_cartModel.price))
-                              ],
+                        Expanded(child: Container(),flex: 8,),
+                        Expanded(child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Container(
+                              margin: EdgeInsets.symmetric(horizontal: 20),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text("Total money :"),
+                                  Text(convertToMoney(_cartModel.price))
+                                ],
+                              ),
                             ),
-                          ),
-                        ),
-                        Expanded(
-                          child: Center(
-                              child: SizedBox(
-                                  width: 150,
-                                  height: 50,
-                                  child: ElevatedButton(
-                                      onPressed: () {}, child: Text("Order")))),
-                        ),
+                            SizedBox(
+                              width: 100,
+                              height: 30,
+                              child: ElevatedButton(
+                                onPressed: (){},
+                                child: Text("Order", style: TextStyle(fontSize: 11),),
+                              ),
+                            )
+                          ],
+                        ),flex: 1,)
                       ],
                     )
                   ],

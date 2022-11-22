@@ -39,4 +39,8 @@ class CartModel {
 
     print("cartModel length = ${listProductDTO.length} ** products lenght = ${_products?.length}");
   }
+
+  set setProductsModel(List<ProductModel> value) {
+    _products = value;
+  }
 }
