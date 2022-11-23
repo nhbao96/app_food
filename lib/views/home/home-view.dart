@@ -9,7 +9,6 @@ import 'package:appp_sale_29092022/data/respositories/product_respository.dart';
 import 'package:appp_sale_29092022/views/cart/cart-bloc.dart';
 import 'package:appp_sale_29092022/views/cart/cart-event.dart';
 import 'package:appp_sale_29092022/views/home/home-bloc.dart';
-import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -126,7 +125,7 @@ class _HomeProductPageState extends State<HomeProductPage> {
           margin: EdgeInsets.only(right: 10, top: 10),
           child: Container(
             child: Badge(
-              badgeContent: Text(count.toString(), style: const TextStyle(color: Colors.white),),
+              label: Text(count.toString(), style: const TextStyle(color: Colors.white),),
               child: Icon(Icons.shopping_cart_outlined),
             ),
           ),
@@ -285,7 +284,7 @@ class _HomeProductContainerState extends State<_HomeProductContainer> {
                               height: 20,
                               child: ElevatedButton(
                                 onPressed: () {
-                                  addToCart(_cartId, idProduct, 1);
+                                  addToCart( idProduct, 1);
                                 },
                                 style: ButtonStyle(
                                     backgroundColor:
@@ -320,8 +319,8 @@ class _HomeProductContainerState extends State<_HomeProductContainer> {
     );
   }
 
-  void addToCart(String idCart, String idProduct, int quantity){
-    cartBloc.eventSink.add(UpdateCartEvent(idCart, idProduct, quantity));
+  void addToCart(String idProduct, int quantity){
+    cartBloc.eventSink.add(IncreaseItemCartEvent(_token, idProduct, quantity));
   }
 
   Widget ReloadButton() {

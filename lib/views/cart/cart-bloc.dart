@@ -16,6 +16,10 @@ class CartBloc extends BaseBloc {
   StreamController<CartModel> _streamController = StreamController();
 
   Stream<CartModel> get streamController => _streamController.stream;
+  late CartModel _model;
+  late String _token;
+
+  CartModel get model => _model;
 
   void updateRepository(CartRespository cartRespository) {
     _cartRespository = cartRespository;
@@ -29,6 +33,12 @@ class CartBloc extends BaseBloc {
         break;
       case UpdateCartEvent:
         handleUpdateCartEvent(event as UpdateCartEvent);
+        break;
+      case IncreaseItemCartEvent:
+        handleIncreaseItemCartEvent(event as IncreaseItemCartEvent);
+        break;
+      case DecreaseItemCartEvent:
+        handleDecreaseItemCartEvent(event as DecreaseItemCartEvent);
         break;
       default:
         break;
@@ -45,7 +55,8 @@ class CartBloc extends BaseBloc {
   void handleLoadCart(CartEvent event) async {
     loadingSink.add(true);
     try {
-      AppResource<CartDTO> response = await _cartRespository.getCart(event.token);
+      _token = event.token;
+      AppResource<CartDTO> response = await _cartRespository.getCart(_token);
       if (response.data == null) {
         throw "data null";
       }
@@ -54,24 +65,33 @@ class CartBloc extends BaseBloc {
       List<ProductDTO> productsDTO = ProductDTO.parser(productResponse);
 
       List<ProductModel> listProducts = [];
-      for(int i = 0 ; i < productsDTO.length; i++){
-        ProductModel productModel =  ProductModel(productsDTO[i].sId, productsDTO[i].name, productsDTO[i].address, productsDTO[i].price, productsDTO[i].img, productsDTO[i].quantity, productsDTO[i].gallery);
+      for (int i = 0; i < productsDTO.length; i++) {
+        ProductModel productModel = ProductModel(
+            productsDTO[i].sId,
+            productsDTO[i].name,
+            productsDTO[i].address,
+            productsDTO[i].price,
+            productsDTO[i].img,
+            productsDTO[i].quantity,
+            productsDTO[i].gallery);
         listProducts.add(productModel);
       }
-      CartModel cartModel = CartModel(cartDTO.id,listProducts, cartDTO.idUser, cartDTO.price, cartDTO.dateCreated);
+      _model = CartModel(cartDTO.id, listProducts, cartDTO.idUser,
+          cartDTO.price, cartDTO.dateCreated);
       loadingSink.add(false);
-      _streamController.sink.add(cartModel);
-      progressSink.add(GetCartSuccess(cartDTO.id.toString()));
+      _streamController.sink.add(_model);
+      progressSink.add(GetCartSuccess(event.token,cartDTO.id.toString()));
     } catch (e) {
       print(e.toString());
-     // loadingSink.add(false);
+      // loadingSink.add(false);
     }
   }
 
-  void handleUpdateCartEvent(UpdateCartEvent event) async{
+  void handleUpdateCartEvent(UpdateCartEvent event) async {
     loadingSink.add(true);
-    try{
-      AppResource<CartDTO> resource=  await _cartRespository.updateCart(event.idCart, event.idProduct, event.quantity);
+    try {
+      AppResource<CartDTO> resource = await _cartRespository.updateCart(event.token,
+          event.idCart, event.idProduct, event.quantity);
       if (resource.data == null) {
         throw "data null";
       }
@@ -80,15 +100,115 @@ class CartBloc extends BaseBloc {
       List<ProductDTO> productsDTO = ProductDTO.parser(productResponse);
 
       List<ProductModel> listProducts = [];
-      for(int i = 0 ; i < productsDTO.length; i++){
-        ProductModel productModel =  ProductModel(productsDTO[i].sId, productsDTO[i].name, productsDTO[i].address, productsDTO[i].price, productsDTO[i].img, productsDTO[i].quantity, productsDTO[i].gallery);
+      for (int i = 0; i < productsDTO.length; i++) {
+        ProductModel productModel = ProductModel(
+            productsDTO[i].sId,
+            productsDTO[i].name,
+            productsDTO[i].address,
+            productsDTO[i].price,
+            productsDTO[i].img,
+            productsDTO[i].quantity,
+            productsDTO[i].gallery);
         listProducts.add(productModel);
       }
-      CartModel cartModel = CartModel(cartDTO.id,listProducts, cartDTO.idUser, cartDTO.price, cartDTO.dateCreated);
+      _model = CartModel(cartDTO.id, listProducts, cartDTO.idUser,
+          cartDTO.price, cartDTO.dateCreated);
       loadingSink.add(false);
-      _streamController.sink.add(cartModel);
-    }catch(e){
+      _streamController.sink.add(_model);
+    } catch (e) {
       print(e.toString());
     }
+  }
+
+  void handleIncreaseItemCartEvent(IncreaseItemCartEvent event) async {
+    loadingSink.add(true);
+    try {
+      int quantity = getProductQuantity(event.idProduct);
+      AppResource<CartDTO> resource;
+      if(quantity == 0){
+        resource = await _cartRespository.addToCart(event.token,event.idProduct);
+      }else{
+        quantity += event.value;
+        resource = await _cartRespository.updateCart(event.token,
+            _model.sId, event.idProduct, quantity);
+      }
+
+      if (resource.data == null) {
+        throw "data null";
+      }
+      CartDTO cartDTO = resource.data!;
+      List<dynamic> productResponse = cartDTO.products!;
+      List<ProductDTO> productsDTO = ProductDTO.parser(productResponse);
+
+      List<ProductModel> listProducts = [];
+      for (int i = 0; i < productsDTO.length; i++) {
+        ProductModel productModel = ProductModel(
+            productsDTO[i].sId,
+            productsDTO[i].name,
+            productsDTO[i].address,
+            productsDTO[i].price,
+            productsDTO[i].img,
+            productsDTO[i].quantity,
+            productsDTO[i].gallery);
+        listProducts.add(productModel);
+      }
+      _model = CartModel(cartDTO.id, listProducts, cartDTO.idUser,
+          cartDTO.price, cartDTO.dateCreated);
+      loadingSink.add(false);
+      _streamController.sink.add(_model);
+    } catch (e) {
+      print(e.toString());
+      loadingSink.add(false);
+    }
+  }
+
+  void handleDecreaseItemCartEvent(DecreaseItemCartEvent event) async {
+    loadingSink.add(true);
+    try {
+      int quantity = getProductQuantity(event.idProduct) - event.value;
+      if(quantity <0){
+        throw "quantity cannot < 0";
+      }
+      AppResource<CartDTO> resource = await _cartRespository.updateCart(event.token,
+          _model.sId, event.idProduct, quantity);
+      if (resource.data == null) {
+        throw "data null";
+      }
+      CartDTO cartDTO = resource.data!;
+      List<dynamic> productResponse = cartDTO.products!;
+      List<ProductDTO> productsDTO = ProductDTO.parser(productResponse);
+
+      List<ProductModel> listProducts = [];
+      for (int i = 0; i < productsDTO.length; i++) {
+        ProductModel productModel = ProductModel(
+            productsDTO[i].sId,
+            productsDTO[i].name,
+            productsDTO[i].address,
+            productsDTO[i].price,
+            productsDTO[i].img,
+            productsDTO[i].quantity,
+            productsDTO[i].gallery);
+        listProducts.add(productModel);
+      }
+      _model = CartModel(cartDTO.id, listProducts, cartDTO.idUser,
+          cartDTO.price, cartDTO.dateCreated);
+      loadingSink.add(false);
+      _streamController.sink.add(_model);
+    } catch (e) {
+      print(e.toString());
+      loadingSink.add(false);
+    }
+  }
+
+  String get token => _token;
+
+  int getProductQuantity(String idProduct) {
+    int result = 0;
+    for (int i = 0; i < _model.products.length; i++) {
+      if (_model.products[i].id == idProduct) {
+        result = _model.products[i].quatity;
+      }
+    }
+    return result;
   }
 }

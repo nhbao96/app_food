@@ -177,15 +177,13 @@ class _CartContainerState extends State<_CartContainer> {
                     children: [
                       TextButton(
                           onPressed: () {
-                            bloc.eventSink.add(UpdateCartEvent(
-                                _cartModel.sId, id, quantity - 1));
+                            bloc.eventSink.add(DecreaseItemCartEvent(_token,id, 1));
                           },
                           child: Text("-")),
                       Text(quantity.toString()),
                       TextButton(
                           onPressed: () {
-                            bloc.eventSink.add(UpdateCartEvent(
-                                _cartModel.sId, id, quantity + 1));
+                            bloc.eventSink.add(IncreaseItemCartEvent(_token,id, 1));
                           },
                           child: Text("+")),
                     ],

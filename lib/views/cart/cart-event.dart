@@ -11,10 +11,10 @@ class CartEvent extends BaseEvent{
 
 class GetCartSuccess extends BaseEvent{
   String _idCart;
-
+  String _token;
   String get idCart => _idCart;
 
-  GetCartSuccess(this._idCart);
+  GetCartSuccess(this._token,this._idCart);
 
   @override
   // TODO: implement props
@@ -23,11 +23,12 @@ class GetCartSuccess extends BaseEvent{
 }
 
 class UpdateCartEvent extends BaseEvent{
+  String _token;
   String _idCart;
   String _idProduct;
   int _quantity;
 
-  UpdateCartEvent(this._idCart, this._idProduct, this._quantity);
+  UpdateCartEvent(this._token,this._idCart, this._idProduct, this._quantity);
 
   int get quantity => _quantity;
 
@@ -35,20 +36,7 @@ class UpdateCartEvent extends BaseEvent{
 
   String get idProduct => _idProduct;
 
-  @override
-  // TODO: implement props
-  List<Object?> get props => [];
-
-}
-
-class UpdateCartSuccess extends BaseEvent{
-  int _quantity;
-  int _totalMoney;
-  int get quantity => _quantity;
-
-  UpdateCartSuccess(this._quantity, this._totalMoney);
-
-  int get totalMoney => _totalMoney;
+  String get token => _token;
 
   @override
   // TODO: implement props
@@ -56,11 +44,27 @@ class UpdateCartSuccess extends BaseEvent{
 
 }
 
-class UpdateCartFailed extends BaseEvent{
+class IncreaseItemCartEvent extends BaseEvent{
+  String token;
+  String idProduct;
+  int value;
+
+  IncreaseItemCartEvent(this.token, this.idProduct, this.value);
+
+  @override
+  // TODO: implement props
+  List<Object?> get props => [];
+}
+
+class DecreaseItemCartEvent extends BaseEvent{
+  String token;
+  String idProduct;
+  int value;
+
+  DecreaseItemCartEvent(this.token, this.idProduct, this.value);
 
   @override
   // TODO: implement props
   List<Object?> get props => [];
 
-  UpdateCartFailed();
 }
