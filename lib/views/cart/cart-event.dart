@@ -11,10 +11,14 @@ class CartEvent extends BaseEvent{
 
 class GetCartSuccess extends BaseEvent{
   String _idCart;
-  String _token;
+  int _price;
   String get idCart => _idCart;
 
-  GetCartSuccess(this._token,this._idCart);
+
+  int get price => _price;
+
+
+  GetCartSuccess(this._idCart, this._price);
 
   @override
   // TODO: implement props

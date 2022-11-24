@@ -13,7 +13,7 @@ import '../../data/respositories/cart_respository.dart';
 
 class CartBloc extends BaseBloc {
   late CartRespository _cartRespository;
-  StreamController<CartModel> _streamController = StreamController();
+  StreamController<CartModel> _streamController = StreamController.broadcast();
 
   Stream<CartModel> get streamController => _streamController.stream;
   late CartModel _model;
@@ -80,7 +80,7 @@ class CartBloc extends BaseBloc {
           cartDTO.price, cartDTO.dateCreated);
       loadingSink.add(false);
       _streamController.sink.add(_model);
-      progressSink.add(GetCartSuccess(event.token,cartDTO.id.toString()));
+      progressSink.add(GetCartSuccess(cartDTO.id.toString(),_model.price));
     } catch (e) {
       print(e.toString());
       // loadingSink.add(false);
