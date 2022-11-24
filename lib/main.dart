@@ -1,3 +1,4 @@
+import 'package:appp_sale_29092022/common/constants/variable_constant.dart';
 import 'package:appp_sale_29092022/views/cart/cart-view.dart';
 import 'package:appp_sale_29092022/views/home/home-view.dart';
 import 'package:appp_sale_29092022/views/sign-in/sigin-page.dart';
@@ -20,12 +21,12 @@ class MyApp extends StatelessWidget {
         appBarTheme: AppBarTheme(color: Colors.white)
       ),
       routes: {
-        "sign-in" : (context) => SignInPage(),
-        "sign-up" : (context) => SignUpPage(),
-        "home-page" : (context) => HomeProductPage(),
-        "cart-page" :(context)=> CartView()
+        VariableConstant.ROUTE_SIGNIN : (context) => SignInPage(),
+        VariableConstant.ROUTE_SIGNUP : (context) => SignUpPage(),
+        VariableConstant.ROUTE_HOME : (context) => HomeProductPage(),
+       VariableConstant.ROUTE_CARTPAGE :(context)=> CartView()
       },
-      initialRoute: "sign-in",
+      initialRoute: VariableConstant.ROUTE_SIGNIN,
     );
   }
 }
