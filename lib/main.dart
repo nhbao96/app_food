@@ -1,4 +1,5 @@
 import 'package:appp_sale_29092022/common/constants/variable_constant.dart';
+import 'package:appp_sale_29092022/data/datasources/local/cache/app_cache.dart';
 import 'package:appp_sale_29092022/views/cart/cart-view.dart';
 import 'package:appp_sale_29092022/views/home/home-view.dart';
 import 'package:appp_sale_29092022/views/sign-in/sigin-page.dart';
@@ -7,6 +8,7 @@ import 'package:flutter/material.dart';
 
 void main() {
   runApp(const MyApp());
+  AppCache.init();
 }
 
 class MyApp extends StatelessWidget {

@@ -72,3 +72,21 @@ class DecreaseItemCartEvent extends BaseEvent{
   List<Object?> get props => [];
 
 }
+
+class ConfirmCartEvent extends BaseEvent{
+
+  @override
+  // TODO: implement props
+  List<Object?> get props => [];
+
+  ConfirmCartEvent();
+}
+
+class ConfirmCartSuccessEvent extends BaseEvent{
+  String msg;
+  @override
+  // TODO: implement props
+  List<Object?> get props => [];
+
+  ConfirmCartSuccessEvent(this.msg);
+}

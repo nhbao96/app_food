@@ -1,4 +1,6 @@
 import 'package:appp_sale_29092022/common/constants/api_constant.dart';
+import 'package:appp_sale_29092022/common/constants/variable_constant.dart';
+import 'package:appp_sale_29092022/data/datasources/local/cache/app_cache.dart';
 import 'package:appp_sale_29092022/data/datasources/remote/dio_client.dart';
 import 'package:dio/dio.dart';
 
@@ -33,8 +35,12 @@ class ApiRequest {
     BaseOptions options = _dio.options;
     return _dio.get(
       ApiConstant.CART,
-      options: Options(headers: {
-        "authorization": "Bearer ${token}",
+      options: Options(
+          validateStatus: (status){
+            return status! <= 500;
+          },
+          headers: {
+            "authorization": "Bearer ${AppCache.getString(VariableConstant.TOKEN)}",
       }),
     );
   }
@@ -62,5 +68,15 @@ class ApiRequest {
       "id_cart" : idCart,
       "quantity" : quantity
     });
+  }
+
+  Future confirmCart(){
+    return _dio.post(ApiConstant.CONFIRM_CART,
+        options: Options(headers: {
+          "authorization": "Bearer ${AppCache.getString(VariableConstant.TOKEN)}",
+        }),
+        data: {
+          "id_cart" : AppCache.getString(VariableConstant.CART_ID)
+        });
   }
 }

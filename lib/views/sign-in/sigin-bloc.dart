@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:appp_sale_29092022/common/bases/base_bloc.dart';
+import 'package:appp_sale_29092022/common/constants/variable_constant.dart';
+import 'package:appp_sale_29092022/data/datasources/local/cache/app_cache.dart';
 import 'package:appp_sale_29092022/data/datasources/remote/dto/app_resource.dart';
 import 'package:appp_sale_29092022/data/models/user.dart';
 import 'package:appp_sale_29092022/data/respositories/authendication_respository.dart';
@@ -39,6 +41,7 @@ class SignBloc extends BaseBloc{
       _signInStreamController.sink.add(userModel);
       loadingSink.add(false);
       progressSink.add(SignInSuccessEvent(token: userModel.token));
+      AppCache.setString(key: VariableConstant.TOKEN,value: userModel.token);
     }catch(e){
         print(e.toString());
         loadingSink.add(false);

@@ -4,5 +4,6 @@ class VariableConstant {
   static final String ROUTE_SIGNUP =  "sign-up";
   static final String ROUTE_HOME =  "home-page";
   static final String ROUTE_CARTPAGE =  "cart-page";
+  static final String CART_ID = "id_cart";
 
 }

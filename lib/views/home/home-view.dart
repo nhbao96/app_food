@@ -9,6 +9,7 @@ import 'package:appp_sale_29092022/data/respositories/product_respository.dart';
 import 'package:appp_sale_29092022/views/cart/cart-bloc.dart';
 import 'package:appp_sale_29092022/views/cart/cart-event.dart';
 import 'package:appp_sale_29092022/views/home/home-bloc.dart';
+import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -82,7 +83,7 @@ class _HomeProductPageState extends State<HomeProductPage> {
                   IconButton(
                       onPressed: () {},
                       icon: Icon(
-                        Icons.stars_rounded,
+                        Icons.history,
                         color: Colors.black,
                       )),
                   Consumer<CartBloc>(
@@ -125,7 +126,7 @@ class _HomeProductPageState extends State<HomeProductPage> {
           margin: EdgeInsets.only(right: 10, top: 10),
           child: Container(
             child: Badge(
-              label: Text(count.toString(), style: const TextStyle(color: Colors.white),),
+              key: Key(count.toString()),
               child: Icon(Icons.shopping_cart_outlined),
             ),
           ),
@@ -320,6 +321,7 @@ class _HomeProductContainerState extends State<_HomeProductContainer> {
   }
 
   void addToCart(String idProduct, int quantity){
+    print("homeview : addToCart");
     cartBloc.eventSink.add(IncreaseItemCartEvent(_token, idProduct, quantity));
   }
 
