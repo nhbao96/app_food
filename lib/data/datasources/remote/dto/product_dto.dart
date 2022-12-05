@@ -1,5 +1,5 @@
-class ProductDTO{
-  String? sId;
+class ProductDTO {
+  String? id;
   String? name;
   String? address;
   int? price;
@@ -7,19 +7,21 @@ class ProductDTO{
   int? quantity;
   List<String>? gallery;
   String? dateCreated;
+  String? dateUpdated;
 
   ProductDTO(
-      {this.sId,
+      {this.id,
         this.name,
         this.address,
         this.price,
         this.img,
         this.quantity,
         this.gallery,
-        this.dateCreated});
+        this.dateCreated,
+        this.dateUpdated});
 
   ProductDTO.fromJson(Map<String, dynamic> json) {
-    sId = json['_id'];
+    id = json['_id'];
     name = json['name'];
     address = json['address'];
     price = json['price'];
@@ -27,11 +29,12 @@ class ProductDTO{
     quantity = json['quantity'];
     gallery = json['gallery'].cast<String>();
     dateCreated = json['date_created'];
+    dateUpdated = json['date_updated'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['_id'] = this.sId;
+    data['id'] = this.id;
     data['name'] = this.name;
     data['address'] = this.address;
     data['price'] = this.price;
@@ -39,15 +42,15 @@ class ProductDTO{
     data['quantity'] = this.quantity;
     data['gallery'] = this.gallery;
     data['date_created'] = this.dateCreated;
+    data['date_updated'] = this.dateUpdated;
     return data;
   }
 
-  @override
-  String toString() {
-    return 'ProductDTO{sId: $sId, name: $name, address: $address, price: $price, img: $img, quantity: $quantity, gallery: $gallery, dateCreated: $dateCreated}';
+  static ProductDTO parser(Map<String,dynamic> json){
+    return ProductDTO.fromJson(json);
   }
 
-  static List<ProductDTO> parser(List<dynamic> json) {
+  static List<ProductDTO> parserListProducts(List<dynamic> json){
     return (json as List).map((e) => ProductDTO.fromJson(e)).toList();
   }
 }

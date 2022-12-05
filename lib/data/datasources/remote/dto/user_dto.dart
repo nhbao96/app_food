@@ -1,32 +1,26 @@
-class UserDto {
+class UserDTO {
   String? email;
   String? name;
   String? phone;
-  int? userGroup;
-  String? registerDate;
   String? token;
 
-  UserDto(
-      {this.email,
+  UserDTO({this.email,
         this.name,
         this.phone,
-        this.userGroup,
-        this.registerDate,
         this.token});
 
-  UserDto.fromJson(Map<String, dynamic> json) {
+  // Named constructor
+  UserDTO.fromJson(Map<String, dynamic> json) {
     email = json['email'];
     name = json['name'];
     phone = json['phone'];
-    userGroup = json['userGroup'];
-    registerDate = json['registerDate'];
     token = json['token'];
   }
 
   @override
   String toString() {
-    return 'UserDto{email: $email, name: $name, phone: $phone, userGroup: $userGroup, registerDate: $registerDate, token: $token}';
+    return 'UserDTO{email: $email, name: $name, phone: $phone, token: $token}';
   }
 
-  static UserDto parser(Map<String,dynamic> json) => UserDto.fromJson(json);
+  // static UserDTO parser(Map<String, dynamic> json) => UserDTO.fromJson(json);
 }

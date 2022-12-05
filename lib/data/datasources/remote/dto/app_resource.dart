@@ -1,10 +1,12 @@
-class AppResource<T>{
-  String? message;
+class AppResource<T> {
+  String? messsage;
   T? data;
-  AppResource({this.message, this.data});
 
-  AppResource.fromJson(Map<String, dynamic> json, Function parserModel){
-    message = json["message"];
-    data = parserModel(json["data"]);
+  AppResource({this.messsage, this.data});
+
+  // parser
+  AppResource.fromJson(Map<String, dynamic> json, Function parseModel) {
+    messsage = json["message"];
+    data = parseModel(json["data"]);
   }
 }

@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "995769738386",
+    "project_id": "baonhappfood",
+    "storage_bucket": "baonhappfood.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:995769738386:android:998bcc5447d9ca25c1324b",
+        "android_client_info": {
+          "package_name": "com.example.appp_sale_29092022"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "995769738386-9p3it31qamir7fav07ein6ac2svph87e.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDOd2bzYTObjZ_g6NP5N9qtbo654oqhyB0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "995769738386-9p3it31qamir7fav07ein6ac2svph87e.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

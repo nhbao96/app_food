@@ -1,9 +1,11 @@
 class VariableConstant {
   static final String TOKEN = "token";
-  static final String ROUTE_SIGNIN = "sign-in";
-  static final String ROUTE_SIGNUP =  "sign-up";
-  static final String ROUTE_HOME =  "home-page";
-  static final String ROUTE_CARTPAGE =  "cart-page";
   static final String CART_ID = "id_cart";
-
+  static final String SIGN_IN = "sign-in";
+  static final String SIGN_UP = "sign-up";
+  static final String SPLASH = "splash";
+  static final String HOME_PAGE = "home";
+  static final String CART_PAGE = "cart";
+  static final String ORDER_HISTORY_PAGE = "order";
+  static final String ORDER_DETAIL_PAGE = "order-detail";
 }

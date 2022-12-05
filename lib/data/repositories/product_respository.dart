@@ -1,10 +1,9 @@
 import 'dart:async';
 
 import 'package:appp_sale_29092022/data/datasources/remote/api_request.dart';
+import 'package:appp_sale_29092022/data/datasources/remote/dto/app_resource.dart';
 import 'package:appp_sale_29092022/data/datasources/remote/dto/product_dto.dart';
 import 'package:dio/dio.dart';
-
-import '../datasources/remote/dto/app_resource.dart';
 
 class ProductRespository{
   late ApiRequest _apiRequest;
@@ -13,14 +12,14 @@ class ProductRespository{
     _apiRequest = apiRequest;
   }
 
-  Future<AppResource<List<ProductDTO>>> getProducts() async {
+  Future<AppResource<List<ProductDTO>>> getProducts() async{
     Completer<AppResource<List<ProductDTO>>> completer = Completer();
     try{
-      Response<dynamic> response = await _apiRequest.getProductRequest();
-      AppResource<List<ProductDTO>> resource = AppResource.fromJson(response.data, ProductDTO.parser);
-      completer.complete(resource);
+      Response<dynamic> response = await _apiRequest.getProducts();
+      AppResource<List<ProductDTO>> resourceDTO = AppResource.fromJson(response.data, ProductDTO.parserListProducts);
+      completer.complete(resourceDTO);
     }catch(e){
-      completer.completeError(e.toString());
+      completer.completeError(e);
     }
     return completer.future;
   }

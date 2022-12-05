@@ -4,9 +4,9 @@ import 'package:provider/single_child_widget.dart';
 
 void showMessage(
     [BuildContext? context,
-      String? title,
-      String? message,
-      List<Widget>? actionsAlert]) {
+    String? title,
+    String? message,
+    List<Widget>? actionsAlert]) {
   if (context == null) return;
   var actionAlignment = (actionsAlert?.length == 1) ? MainAxisAlignment.end : MainAxisAlignment.center;
   showDialog<void>(
