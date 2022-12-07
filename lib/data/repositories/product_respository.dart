@@ -1,9 +1,9 @@
 import 'dart:async';
-
-import 'package:appp_sale_29092022/data/datasources/remote/api_request.dart';
-import 'package:appp_sale_29092022/data/datasources/remote/dto/app_resource.dart';
-import 'package:appp_sale_29092022/data/datasources/remote/dto/product_dto.dart';
 import 'package:dio/dio.dart';
+
+import '../datasources/remote/api_request.dart';
+import '../datasources/remote/dto/app_resource.dart';
+import '../datasources/remote/dto/product_dto.dart';
 
 class ProductRespository{
   late ApiRequest _apiRequest;

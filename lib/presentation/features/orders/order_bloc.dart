@@ -1,15 +1,13 @@
 import 'dart:async';
-
-import 'package:appp_sale_29092022/common/bases/base_bloc.dart';
-import 'package:appp_sale_29092022/common/bases/base_event.dart';
-import 'package:appp_sale_29092022/data/datasources/remote/dto/app_resource.dart';
-import 'package:appp_sale_29092022/data/datasources/remote/dto/cart_dto.dart';
-import 'package:appp_sale_29092022/data/datasources/remote/dto/product_dto.dart';
-import 'package:appp_sale_29092022/data/model/Product.dart';
-import 'package:appp_sale_29092022/data/repositories/order_repository.dart';
-import 'package:appp_sale_29092022/presentation/features/orders/order_event.dart';
-
+import '../../../common/bases/base_bloc.dart';
+import '../../../common/bases/base_event.dart';
+import '../../../data/datasources/remote/dto/app_resource.dart';
+import '../../../data/datasources/remote/dto/cart_dto.dart';
+import '../../../data/datasources/remote/dto/product_dto.dart';
 import '../../../data/model/Cart.dart';
+import '../../../data/model/Product.dart';
+import '../../../data/repositories/order_repository.dart';
+import 'order_event.dart';
 
 class OrderBloc extends BaseBloc {
   StreamController<List<Cart>> _streamController = StreamController.broadcast();

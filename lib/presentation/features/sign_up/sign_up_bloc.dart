@@ -1,10 +1,11 @@
 
-import 'package:appp_sale_29092022/common/bases/base_bloc.dart';
-import 'package:appp_sale_29092022/common/bases/base_event.dart';
-import 'package:appp_sale_29092022/data/datasources/remote/dto/app_resource.dart';
-import 'package:appp_sale_29092022/data/datasources/remote/dto/user_dto.dart';
-import 'package:appp_sale_29092022/data/repositories/authentication_repository.dart';
-import 'package:appp_sale_29092022/presentation/features/sign_up/sign_up_event.dart';
+import 'package:app_food_baonh/presentation/features/sign_up/sign_up_event.dart';
+
+import '../../../common/bases/base_bloc.dart';
+import '../../../common/bases/base_event.dart';
+import '../../../data/datasources/remote/dto/app_resource.dart';
+import '../../../data/datasources/remote/dto/user_dto.dart';
+import '../../../data/repositories/authentication_repository.dart';
 
 class SignUpBloc extends BaseBloc {
   late AuthenticationRepository _repository;

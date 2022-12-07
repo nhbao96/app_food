@@ -1,16 +1,15 @@
-import 'package:appp_sale_29092022/common/bases/base_widget.dart';
-import 'package:appp_sale_29092022/common/constants/variable_constant.dart';
-import 'package:appp_sale_29092022/common/utils/extension.dart';
-import 'package:appp_sale_29092022/data/datasources/remote/api_request.dart';
-import 'package:appp_sale_29092022/data/model/Product.dart';
-import 'package:appp_sale_29092022/data/repositories/order_repository.dart';
-import 'package:appp_sale_29092022/presentation/features/orders/order_bloc.dart';
-import 'package:appp_sale_29092022/presentation/features/orders/order_detail_page.dart';
-import 'package:appp_sale_29092022/presentation/features/orders/order_event.dart';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../common/bases/base_widget.dart';
+import '../../../common/constants/variable_constant.dart';
+import '../../../common/utils/extension.dart';
+import '../../../data/datasources/remote/api_request.dart';
 import '../../../data/model/Cart.dart';
+import '../../../data/repositories/order_repository.dart';
+import 'order_bloc.dart';
+import 'order_event.dart';
 
 class OrderHistoryPage extends StatefulWidget {
   const OrderHistoryPage({Key? key}) : super(key: key);

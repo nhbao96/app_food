@@ -1,17 +1,12 @@
 import 'dart:async';
-
-import 'package:appp_sale_29092022/common/bases/base_bloc.dart';
-import 'package:appp_sale_29092022/common/bases/base_event.dart';
-import 'package:appp_sale_29092022/data/datasources/remote/dto/app_resource.dart';
-import 'package:appp_sale_29092022/data/datasources/remote/dto/cart_dto.dart';
-import 'package:appp_sale_29092022/data/datasources/remote/dto/product_dto.dart';
-import 'package:appp_sale_29092022/data/repositories/cart_respository.dart';
-import 'package:appp_sale_29092022/data/repositories/product_respository.dart';
-import 'package:appp_sale_29092022/presentation/features/cart/cart_event.dart';
-import 'package:appp_sale_29092022/presentation/features/home/home_event.dart';
-
+import '../../../common/bases/base_bloc.dart';
+import '../../../common/bases/base_event.dart';
+import '../../../data/datasources/remote/dto/app_resource.dart';
+import '../../../data/datasources/remote/dto/product_dto.dart';
 import '../../../data/model/Cart.dart';
 import '../../../data/model/Product.dart';
+import '../../../data/repositories/product_respository.dart';
+import 'home_event.dart';
 
 class HomeBloc extends BaseBloc {
   late ProductRespository _productRespository;

@@ -1,7 +1,9 @@
-import 'package:appp_sale_29092022/common/constants/variable_constant.dart';
-import 'package:appp_sale_29092022/data/datasources/local/cache/app_cache.dart';
+
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+
+import '../../../common/constants/variable_constant.dart';
+import '../../../data/datasources/local/cache/app_cache.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({Key? key}) : super(key: key);

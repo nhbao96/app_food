@@ -1,5 +1,6 @@
-import 'package:appp_sale_29092022/common/constants/api_constant.dart';
 import 'package:dio/dio.dart';
+
+import '../../../common/constants/api_constant.dart';
 
 class DioClient {
   Dio? _dio;

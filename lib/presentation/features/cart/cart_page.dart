@@ -1,5 +1,3 @@
-import 'package:appp_sale_29092022/data/model/Cart.dart';
-import 'package:appp_sale_29092022/presentation/features/cart/cart_event.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -9,8 +7,10 @@ import '../../../common/utils/extension.dart';
 import '../../../common/widgets/loading_widget.dart';
 import '../../../common/widgets/progress_listener_widget.dart';
 import '../../../data/datasources/remote/api_request.dart';
+import '../../../data/model/Cart.dart';
 import '../../../data/repositories/cart_respository.dart';
 import 'cart_bloc.dart';
+import 'cart_event.dart';
 class CartPage extends StatefulWidget {
   const CartPage({Key? key}) : super(key: key);
 

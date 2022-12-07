@@ -1,6 +1,6 @@
-import 'package:appp_sale_29092022/common/bases/base_widget.dart';
 import 'package:flutter/material.dart';
 
+import '../../../common/bases/base_widget.dart';
 import '../../../data/model/Cart.dart';
 
 class OrderDetailPage extends StatefulWidget {

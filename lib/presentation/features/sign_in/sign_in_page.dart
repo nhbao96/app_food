@@ -1,14 +1,16 @@
-import 'package:appp_sale_29092022/common/bases/base_widget.dart';
-import 'package:appp_sale_29092022/common/utils/extension.dart';
-import 'package:appp_sale_29092022/common/widgets/loading_widget.dart';
-import 'package:appp_sale_29092022/common/widgets/progress_listener_widget.dart';
-import 'package:appp_sale_29092022/data/datasources/remote/api_request.dart';
-import 'package:appp_sale_29092022/data/repositories/authentication_repository.dart';
-import 'package:appp_sale_29092022/presentation/features/sign_in/sign_in_bloc.dart';
-import 'package:appp_sale_29092022/presentation/features/sign_in/sign_in_event.dart';
+
+import 'package:app_food_baonh/presentation/features/sign_in/sign_in_bloc.dart';
+import 'package:app_food_baonh/presentation/features/sign_in/sign_in_event.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
+
+import '../../../common/bases/base_widget.dart';
+import '../../../common/utils/extension.dart';
+import '../../../common/widgets/loading_widget.dart';
+import '../../../common/widgets/progress_listener_widget.dart';
+import '../../../data/datasources/remote/api_request.dart';
+import '../../../data/repositories/authentication_repository.dart';
 class SignInPage extends StatefulWidget {
   @override
   State<SignInPage> createState() => _SignInPageState();

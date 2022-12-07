@@ -1,10 +1,8 @@
 import 'dart:async';
-
-import 'package:appp_sale_29092022/common/bases/base_bloc.dart';
-import 'package:appp_sale_29092022/common/bases/base_event.dart';
-import 'package:appp_sale_29092022/common/constants/variable_constant.dart';
-import 'package:appp_sale_29092022/common/utils/extension.dart';
-import 'package:appp_sale_29092022/data/datasources/local/cache/app_cache.dart';
+import '../../../common/bases/base_bloc.dart';
+import '../../../common/bases/base_event.dart';
+import '../../../common/constants/variable_constant.dart';
+import '../../../data/datasources/local/cache/app_cache.dart';
 import '../../../data/datasources/remote/dto/app_resource.dart';
 import '../../../data/datasources/remote/dto/cart_dto.dart';
 import '../../../data/datasources/remote/dto/product_dto.dart';
@@ -190,11 +188,11 @@ class CartBloc extends BaseBloc{
     loadingSink.add(true);
     try{
       String resource = await _cartRespository.confirmCart();
-      progressSink.add(ConfirmCartSuccessEvent(resource));
+      progressSink.add(ConfirmCartSuccessEvent(resource) as BaseEvent);
       _cartModel!.clear();
       _streamController.add(_cartModel!);
     }catch(e){
-      progressSink.add(ConfirmCartFailedEvent(e.toString()));
+      progressSink.add(ConfirmCartFailedEvent(e.toString()) as BaseEvent);
     }
     loadingSink.add(false);
   }

@@ -1,5 +1,3 @@
-import 'package:appp_sale_29092022/data/datasources/remote/dto/product_dto.dart';
-
 class CartDTO {
   String? id;
   List<dynamic>? products;

@@ -1,21 +1,21 @@
-import 'package:appp_sale_29092022/common/bases/base_widget.dart';
-import 'package:appp_sale_29092022/common/constants/variable_constant.dart';
-import 'package:appp_sale_29092022/data/datasources/remote/api_request.dart';
-import 'package:appp_sale_29092022/data/model/Cart.dart';
-import 'package:appp_sale_29092022/data/model/Product.dart';
-import 'package:appp_sale_29092022/data/repositories/cart_respository.dart';
-import 'package:appp_sale_29092022/presentation/features/cart/cart_bloc.dart';
-import 'package:appp_sale_29092022/presentation/features/cart/cart_event.dart';
-import 'package:appp_sale_29092022/presentation/features/home/home_event.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../common/bases/base_widget.dart';
 import '../../../common/constants/api_constant.dart';
+import '../../../common/constants/variable_constant.dart';
 import '../../../common/utils/extension.dart';
 import '../../../common/widgets/loading_widget.dart';
 import '../../../common/widgets/progress_listener_widget.dart';
+import '../../../data/datasources/remote/api_request.dart';
+import '../../../data/model/Cart.dart';
+import '../../../data/model/Product.dart';
+import '../../../data/repositories/cart_respository.dart';
 import '../../../data/repositories/product_respository.dart';
+import '../cart/cart_bloc.dart';
+import '../cart/cart_event.dart';
 import 'home_bloc.dart';
+import 'home_event.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
