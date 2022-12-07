@@ -91,9 +91,12 @@ class _HomePageState extends State<HomePage> {
                         stream: bloc.streamController.stream,
                         builder: (context, snapshot) {
                           if (snapshot.hasError || snapshot.data == null || snapshot.data?.products.isEmpty == true) {
-                            return Container();
+                            return _shoppingCartWidget(0);
                           }
-                          int count = snapshot.data?.products.length ?? 0;
+                          int count = 0;
+                          for(int i = 0; i < snapshot.data!.products.length;i++){
+                            count+=snapshot.data!.products[i].quantity;
+                          }
                           return _shoppingCartWidget(count);
                         }
                     );
@@ -246,8 +249,7 @@ class _HomePageContainerState extends State<_HomePageContainer> {
                               softWrap: false,
                               style: TextStyle(
                                   fontSize: 12,
-                                  color: Colors.black,
-                                  fontStyle: FontStyle.italic),
+                                  color: Colors.black),
                               overflow: TextOverflow.ellipsis,
                             ),
                           ),

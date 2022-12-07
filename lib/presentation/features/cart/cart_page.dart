@@ -111,7 +111,7 @@ class _CartContainerState extends State<_CartContainer> {
               ProgressListenerWidget<CartBloc>(child: Container(), callback: (event){
                 switch(event.runtimeType){
                   case ConfirmCartSuccessEvent:
-                    Navigator.pop(context);
+                    Navigator.pop(context,true);
                     showSnackBar(context, (event as ConfirmCartSuccessEvent).msg);
                     break;
                   case ConfirmCartFailedEvent:

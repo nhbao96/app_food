@@ -1,4 +1,4 @@
-package com.example.appp_sale_29092022
+package com.example.baonh_appfood
 
 import io.flutter.embedding.android.FlutterActivity
 
