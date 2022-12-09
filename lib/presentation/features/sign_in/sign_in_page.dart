@@ -74,9 +74,9 @@ class _SignInContainerState extends State<_SignInContainer> {
           children: [
             Column(
               children: [
-                Expanded(
+                Flexible(
                     flex: 2, child: Image.asset("assets/images/ic_hello_food.png")),
-                Expanded(
+                Flexible(
                   flex: 4,
                   child: Container(
                     child: Column(
@@ -108,7 +108,7 @@ class _SignInContainerState extends State<_SignInContainer> {
                     ),
                   ),
                 ),
-                Expanded(child: _buildTextSignUp(function: () {
+                Flexible(child: _buildTextSignUp(function: () {
                   Navigator
                       .pushNamed(context, "sign-up")
                       .then((value){
@@ -226,7 +226,6 @@ class _SignInContainerState extends State<_SignInContainer> {
 
   Widget _buildButtonSignIn({Function? onPress = null}) {
     return Container(
-        margin: EdgeInsets.only(top: 20),
         child: ElevatedButtonTheme(
             data: ElevatedButtonThemeData(
                 style: ButtonStyle(
