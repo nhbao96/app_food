@@ -86,6 +86,7 @@ class _HomePageState extends State<HomePage> {
                     )),
                 Consumer<CartBloc>(
                   builder: (context, bloc, child){
+                    print("\n\n\n----- appbar Consumer CartBloc------------ \n\n\n");
                     return StreamBuilder<Cart>(
                         initialData: null,
                         stream: bloc.streamController.stream,

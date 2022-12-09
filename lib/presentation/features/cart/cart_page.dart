@@ -1,3 +1,4 @@
+import 'package:app_food_baonh/common/constants/variable_constant.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -21,25 +22,31 @@ class CartPage extends StatefulWidget {
 class _CartViewState extends State<CartPage> {
   @override
   Widget build(BuildContext context) {
-    return PageContainer(
-      child: _CartContainer(),
-      providers: [
-        Provider<ApiRequest>(
-          create: (context) => ApiRequest(),
-        ),
-        ProxyProvider<ApiRequest, CartRespository>(
-            create: (context) => CartRespository(),
-            update: (context, apiRequest, cartRepository) {
-              cartRepository?.updateApiRequest(apiRequest);
-              return cartRepository!;
-            }),
-        ProxyProvider<CartRespository, CartBloc>(
-            create: (context) => CartBloc(),
-            update: (context, cartRespository, cartBloc) {
-              cartBloc?.updateRepository(cartRespository);
-              return cartBloc!;
-            })
-      ],
+    return WillPopScope(
+      onWillPop: () async{
+
+          return true;
+      },
+      child: PageContainer(
+        child: _CartContainer(),
+        providers: [
+          Provider<ApiRequest>(
+            create: (context) => ApiRequest(),
+          ),
+          ProxyProvider<ApiRequest, CartRespository>(
+              create: (context) => CartRespository(),
+              update: (context, apiRequest, cartRepository) {
+                cartRepository?.updateApiRequest(apiRequest);
+                return cartRepository!;
+              }),
+          ProxyProvider<CartRespository, CartBloc>(
+              create: (context) => CartBloc(),
+              update: (context, cartRespository, cartBloc) {
+                cartBloc?.updateRepository(cartRespository);
+                return cartBloc!;
+              })
+        ],
+      ),
     );
   }
 }
@@ -111,7 +118,7 @@ class _CartContainerState extends State<_CartContainer> {
               ProgressListenerWidget<CartBloc>(child: Container(), callback: (event){
                 switch(event.runtimeType){
                   case ConfirmCartSuccessEvent:
-                    Navigator.pop(context,true);
+                    Navigator.pushReplacementNamed(context, VariableConstant.HOME_PAGE);
                     showSnackBar(context, (event as ConfirmCartSuccessEvent).msg);
                     break;
                   case ConfirmCartFailedEvent:
