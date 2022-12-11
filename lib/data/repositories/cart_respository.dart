@@ -13,8 +13,10 @@ class CartRespository{
   }
 
   Future<AppResource<CartDTO>> getCart() async{
+
     Completer<AppResource<CartDTO>> completer = Completer();
     try{
+
       Response<dynamic> response = await _apiRequest.getCart();
       AppResource<CartDTO> resourceDTO = AppResource.fromJson(response.data, CartDTO.parser);
       completer.complete(resourceDTO);

@@ -12,6 +12,7 @@ import '../../../data/model/Cart.dart';
 import '../../../data/repositories/cart_respository.dart';
 import 'cart_bloc.dart';
 import 'cart_event.dart';
+
 class CartPage extends StatefulWidget {
   const CartPage({Key? key}) : super(key: key);
 
@@ -20,12 +21,25 @@ class CartPage extends StatefulWidget {
 }
 
 class _CartViewState extends State<CartPage> {
+  late bool _isReloadHome;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _isReloadHome = false;
+  }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () async{
-
-          return true;
+      onWillPop: () async {
+        if(_isReloadHome){
+          Navigator.pushReplacementNamed(context,VariableConstant.HOME_PAGE);
+        }else{
+          Navigator.pop(context);
+        }
+        return true;
       },
       child: PageContainer(
         child: _CartContainer(),
@@ -46,6 +60,21 @@ class _CartViewState extends State<CartPage> {
                 return cartBloc!;
               })
         ],
+        appBar: AppBar(
+          actions: [
+            ProgressListenerWidget<CartBloc>(
+                child: Container(),
+                callback: (event) {
+                  switch (event.runtimeType) {
+                    case UpdateCartSuccessEvent:
+                      _isReloadHome = true;
+                      break;
+                    default:
+                      break;
+                  }
+                })
+          ],
+        ),
       ),
     );
   }
@@ -53,9 +82,9 @@ class _CartViewState extends State<CartPage> {
 
 class _CartContainer extends StatefulWidget {
   const _CartContainer({Key? key}) : super(key: key);
+
   @override
   State<_CartContainer> createState() => _CartContainerState();
-
 }
 
 class _CartContainerState extends State<_CartContainer> {
@@ -73,83 +102,101 @@ class _CartContainerState extends State<_CartContainer> {
   Widget build(BuildContext context) {
     return SafeArea(
         child: LoadingWidget(
-          bloc: _cartBloc,
-          child: Column(
-            children: [
-              Expanded(
-                child: Container(
-                  margin: EdgeInsets.symmetric(vertical: 20, horizontal: 10),
-                  child: StreamBuilder<Cart>(
-                    stream: _cartBloc.streamController.stream,
-                    builder: (context, snapshot) {
-                      if (snapshot.hasError ||
-                          (snapshot.hasData && snapshot.data == null)) {
-                        return Center(
-                          child: Text("Data failed"),
-                        );
-                      }
-                      if (snapshot.hasData && snapshot.data?.products == []) {
-                        return _emptyCartWidget();
-                      }
-                      return ListView.builder(
-                        itemCount: snapshot.data?.products.length ?? 0,
-                        itemBuilder: (context, index) {
-                          String id = snapshot.data!.products[index].id ?? "";
-                          String name = snapshot.data!.products[index].name ?? "";
-                          String img = snapshot.data!.products[index].img ?? "";
-                          int price = snapshot.data!.products[index].price ?? 0;
-                          int quantity = snapshot.data!.products[index].quantity ?? 0;
+      bloc: _cartBloc,
+      child: Column(
+        children: [
+          Expanded(
+            child: Container(
+              margin: EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+              child: StreamBuilder<Cart>(
+                stream: _cartBloc.streamController.stream,
+                builder: (context, snapshot) {
+                  if (snapshot.hasError == true ||
+                      (snapshot.hasData == true && snapshot.data == null)) {
+                    return Center(
+                      child: Text("Data failed"),
+                    );
+                  }
+                  if ((snapshot.hasData == false  && snapshot.data?.products.length == 0)|| (snapshot.hasData && snapshot.data?.products == [])) {
+                     return _emptyCartWidget();
+                  }
+                  return ListView.builder(
+                    itemCount: snapshot.data?.products.length ?? 0,
+                    itemBuilder: (context, index) {
+                      String id = snapshot.data!.products[index].id ?? "";
+                      String name = snapshot.data!.products[index].name ?? "";
+                      String img = snapshot.data!.products[index].img ?? "";
+                      int price = snapshot.data!.products[index].price ?? 0;
+                      int quantity =
+                          snapshot.data!.products[index].quantity ?? 0;
 
-                          return Container(
-                            height: 85,
-                            child: _cartItemWidget(id, img, String, name, price, quantity),
-                          );
-                        },
+                      return Container(
+                        height: 85,
+                        child: _cartItemWidget(
+                            id, img, String, name, price, quantity),
                       );
                     },
-                  ),
-                ),
-                flex: 7,
+                  );
+                },
               ),
-              Expanded(child: Container(
-                margin: EdgeInsets.symmetric(horizontal: 20),
-                child: _summaryCartWidget(),
-              )),
-              ProgressListenerWidget<CartBloc>(child: Container(), callback: (event){
-                switch(event.runtimeType){
+            ),
+            flex: 7,
+          ),
+          Expanded(
+              child: Container(
+            margin: EdgeInsets.symmetric(horizontal: 20),
+            child:  _summaryCartWidget(),
+          )),
+          ProgressListenerWidget<CartBloc>(
+              child: Container(),
+              callback: (event) {
+                switch (event.runtimeType) {
                   case ConfirmCartSuccessEvent:
-                    Navigator.pushReplacementNamed(context, VariableConstant.HOME_PAGE);
-                    showSnackBar(context, (event as ConfirmCartSuccessEvent).msg);
+                    Navigator.pushReplacementNamed(
+                        context, VariableConstant.HOME_PAGE);
+                    showSnackBar(
+                        context, (event as ConfirmCartSuccessEvent).msg);
                     break;
                   case ConfirmCartFailedEvent:
-                    showSnackBar(context, (event as ConfirmCartFailedEvent).msg);
+                    showSnackBar(
+                        context, (event as ConfirmCartFailedEvent).msg);
                     break;
                 }
               })
-            ],
-          ),
-        ));
+        ],
+      ),
+    ));
   }
 
   Widget _emptyCartWidget() {
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
-        Text(
-          "Cart in detail",
-          style: TextStyle(
-              fontSize: 15, fontWeight: FontWeight.bold, color: Colors.black),
+        Flexible(flex: 1,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Text(
+                "Cart in detail",
+                style: TextStyle(
+                    fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),
+              ),
+              Text(
+                "Your cart has no product",
+                style: TextStyle(fontSize: 15, color: Colors.black),
+              ),
+            ],
+          ),
         ),
-        Text(
-          "Your cart is empty",
-          style: TextStyle(fontSize: 12, color: Colors.black),
-        )
+        Flexible(
+            flex: 4,
+            child: Image.asset("assets/images/icon_empty_cart.png",width: 200,))
       ],
     );
   }
 
-  Widget _cartItemWidget(String id, String img, String, name,
-      int price, int quantity) {
+  Widget _cartItemWidget(
+      String id, String img, String, name, int price, int quantity) {
     return Card(
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -157,9 +204,9 @@ class _CartContainerState extends State<_CartContainer> {
         children: [
           Flexible(
               child: Image.network(
-                ApiConstant.BASE_URL + img,
-                width: 150,
-              )),
+            ApiConstant.BASE_URL + img,
+            width: 150,
+          )),
           Flexible(
             child: Container(
               margin: EdgeInsets.symmetric(horizontal: 10),
@@ -188,7 +235,8 @@ class _CartContainerState extends State<_CartContainer> {
                         height: 30,
                         child: TextButton(
                           onPressed: () {
-                            _cartBloc.eventSink.add(DecreaseCartItemEvent( id, 1));
+                            _cartBloc.eventSink
+                                .add(DecreaseCartItemEvent(id, 1));
                           },
                           child: Text(
                             "-",
@@ -205,7 +253,8 @@ class _CartContainerState extends State<_CartContainer> {
                         height: 30,
                         child: TextButton(
                           onPressed: () {
-                            _cartBloc.eventSink.add(IncreaseCartItemEvent( id, 1));
+                            _cartBloc.eventSink
+                                .add(IncreaseCartItemEvent(id, 1));
                           },
                           child: Text(
                             "+",
@@ -225,34 +274,49 @@ class _CartContainerState extends State<_CartContainer> {
     );
   }
 
-  Widget _summaryCartWidget(){
+  Widget _summaryCartWidget() {
     int value = 0;
-    return Column(
-      children: [
-        StreamBuilder<Cart>(
-            stream: _cartBloc.streamController.stream,
-            builder: (context, snapshot) {
-              int price = snapshot.data?.price ?? 0;
-              return Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text("Total Money :", style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold,color: Colors.black)),
-                  Text(convertToMoney(price), style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold,color: Colors.black)),
-                ],
-              );
+    return Container(
+      child:  StreamBuilder<Cart>(
+          stream: _cartBloc.streamController.stream,
+          builder: (context, snapshot) {
+            if(snapshot.data == null){
+              return Container();
             }
-        ),
-        SizedBox(
-          width: 100,
-          child: ElevatedButton(
-            onPressed: (){
-              _cartBloc.eventSink.add(ConfirmCartEvent());
-            },
-            child: Text("Order", style:  TextStyle(fontSize: 14, fontWeight: FontWeight.bold,color: Colors.black)),
-          ),
-        )
-      ],
+            int price = snapshot.data?.price ?? 0;
+            return Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text("Total Money :",
+                        style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black)),
+                    Text(convertToMoney(price),
+                        style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black)),
+                  ],
+                ),
+                SizedBox(
+                  width: 100,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      _cartBloc.eventSink.add(ConfirmCartEvent());
+                    },
+                    child: Text("Order",
+                        style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black)),
+                  ),
+                )
+              ],
+            );
+          }),
     );
   }
-
 }

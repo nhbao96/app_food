@@ -58,3 +58,12 @@ class ConfirmCartFailedEvent extends BaseEvent{
   List<Object?> get props => [];
 
 }
+
+class UpdateCartSuccessEvent extends BaseEvent{
+  @override
+  // TODO: implement props
+  List<Object?> get props =>[];
+
+  UpdateCartSuccessEvent();
+}
+

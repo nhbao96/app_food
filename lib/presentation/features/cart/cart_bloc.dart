@@ -140,7 +140,9 @@ class CartBloc extends BaseBloc{
       }
       _cartModel = Cart(cartDTO.id, listProduct, cartDTO.idUser, cartDTO.price, cartDTO.dateCreated);
       AppCache.setString(key: VariableConstant.CART_ID,value: cartDTO.id.toString());
+
       _streamController.add(_cartModel!);
+      progressSink.add(UpdateCartSuccessEvent());
     }catch(e){
       print(e.toString());
     }
@@ -178,6 +180,7 @@ class CartBloc extends BaseBloc{
       _cartModel = Cart(cartDTO.id, listProduct, cartDTO.idUser, cartDTO.price, cartDTO.dateCreated);
       AppCache.setString(key: VariableConstant.CART_ID,value: cartDTO.id.toString());
       _streamController.add(_cartModel!);
+      progressSink.add(UpdateCartSuccessEvent());
     }catch(e){
       print(e.toString());
     }

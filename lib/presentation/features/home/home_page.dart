@@ -119,12 +119,12 @@ class _HomePageState extends State<HomePage> {
         Navigator.pushNamed(context, VariableConstant.CART_PAGE);
       },
       child: Container(
-        margin: EdgeInsets.only(right: 10, top: 10),
+        margin: EdgeInsets.only(right: 10, top: 5),
         child: Container(
-          child: Badge(
+          child: countItems !=0 ?Badge(
             label: Text(countItems.toString(), style: const TextStyle(color: Colors.white),),
             child: Icon(Icons.shopping_cart_outlined),
-          ),
+          ) : Icon(Icons.shopping_cart_outlined),
         ),
       ),
     );
