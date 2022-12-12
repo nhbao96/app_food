@@ -34,9 +34,9 @@ class _CartViewState extends State<CartPage> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        if(_isReloadHome){
-          Navigator.pushReplacementNamed(context,VariableConstant.HOME_PAGE);
-        }else{
+        if (_isReloadHome) {
+          Navigator.pushReplacementNamed(context, VariableConstant.HOME_PAGE);
+        } else {
           Navigator.pop(context);
         }
         return true;
@@ -117,8 +117,10 @@ class _CartContainerState extends State<_CartContainer> {
                       child: Text("Data failed"),
                     );
                   }
-                  if ((snapshot.hasData == false  && snapshot.data?.products.length == 0)|| (snapshot.hasData && snapshot.data?.products == [])) {
-                     return _emptyCartWidget();
+                  if ((snapshot.hasData &&
+                          snapshot.data?.products.length == 0) &&
+                      snapshot.connectionState == ConnectionState.active) {
+                    return _emptyCartWidget();
                   }
                   return ListView.builder(
                     itemCount: snapshot.data?.products.length ?? 0,
@@ -145,7 +147,7 @@ class _CartContainerState extends State<_CartContainer> {
           Expanded(
               child: Container(
             margin: EdgeInsets.symmetric(horizontal: 20),
-            child:  _summaryCartWidget(),
+            child: _summaryCartWidget(),
           )),
           ProgressListenerWidget<CartBloc>(
               child: Container(),
@@ -172,14 +174,17 @@ class _CartContainerState extends State<_CartContainer> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
-        Flexible(flex: 1,
+        Flexible(
+          flex: 1,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               Text(
                 "Cart in detail",
                 style: TextStyle(
-                    fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black),
               ),
               Text(
                 "Your cart has no product",
@@ -190,7 +195,10 @@ class _CartContainerState extends State<_CartContainer> {
         ),
         Flexible(
             flex: 4,
-            child: Image.asset("assets/images/icon_empty_cart.png",width: 200,))
+            child: Image.asset(
+              "assets/images/icon_empty_cart.png",
+              width: 200,
+            ))
       ],
     );
   }
@@ -277,10 +285,10 @@ class _CartContainerState extends State<_CartContainer> {
   Widget _summaryCartWidget() {
     int value = 0;
     return Container(
-      child:  StreamBuilder<Cart>(
+      child: StreamBuilder<Cart>(
           stream: _cartBloc.streamController.stream,
           builder: (context, snapshot) {
-            if(snapshot.data == null){
+            if (snapshot.data == null || snapshot.data?.products.length == 0) {
               return Container();
             }
             int price = snapshot.data?.price ?? 0;

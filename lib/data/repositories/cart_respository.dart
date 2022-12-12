@@ -16,11 +16,18 @@ class CartRespository{
 
     Completer<AppResource<CartDTO>> completer = Completer();
     try{
-
       Response<dynamic> response = await _apiRequest.getCart();
       AppResource<CartDTO> resourceDTO = AppResource.fromJson(response.data, CartDTO.parser);
       completer.complete(resourceDTO);
-    }catch(e){
+    }on DioError catch(dioError){
+      if(dioError.response?.statusCode == 500){
+        print("\n\ndebug CartRespository 3");
+        AppResource<CartDTO> resourceDTO = AppResource<CartDTO>();
+        completer.complete(resourceDTO);
+      }
+      print("dioError.error ===== ${dioError}");
+    }
+    catch(e){
       completer.completeError(e);
     }
     return completer.future;

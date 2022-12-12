@@ -55,6 +55,8 @@ class CartBloc extends BaseBloc{
     try {
       AppResource<CartDTO> appResourceDTO = await _cartRespository.getCart();
       if (appResourceDTO.data == null) {
+        print("\n\handleGetCartEvent : debug data null\n\n");
+        _streamController.add(Cart("", [], "", 0, ""));
         throw "data null";
       }
       CartDTO cartDTO = appResourceDTO.data!;
@@ -100,7 +102,6 @@ class CartBloc extends BaseBloc{
   }
 
   void handleIncreaseCartItemEvent(IncreaseCartItemEvent event) async{
-
     loadingSink.add(true);
     try{
       print("handleIncreaseCartItemEvent begin");
@@ -115,7 +116,6 @@ class CartBloc extends BaseBloc{
         quantity += event.quantity;
         resourceDTO = await _cartRespository.updateCart(event.idProduct, quantity);
       }
-
       if (resourceDTO.data == null) {
         throw "data null";
       }
@@ -156,6 +156,8 @@ class CartBloc extends BaseBloc{
       quantity -= event.quantity;
       AppResource<CartDTO> resourceDTO = await _cartRespository.updateCart(event.idProduct, quantity);
       if (resourceDTO.data == null) {
+        print("\n\nhandleDecreaseCartItemEvent : debug data null\n\n");
+        _streamController.add(Cart("", [], "", 0, ""));
         throw "data null";
       }
       CartDTO cartDTO = resourceDTO.data!;

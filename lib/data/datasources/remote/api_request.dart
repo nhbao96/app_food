@@ -35,9 +35,6 @@ class ApiRequest {
   Future getCart() {
     return _dio.get(ApiConstant.CART,
         options: Options(
-            validateStatus: (status) {
-              return status! <= 500;
-            },
             headers: {
               "authorization":
                   "Bearer ${AppCache.getString(VariableConstant.TOKEN)}",

@@ -46,7 +46,6 @@ class OrderBloc extends BaseBloc {
         throw "order data null";
       }
       List<CartDTO> listcartDTO = resourceDTO.data!;
-      print("listcartDTO length = ${listcartDTO.length}");
       List<Cart> listCart = [];
       listcartDTO.forEach((element) {
         List<dynamic> productResource = element.products!;
@@ -64,11 +63,9 @@ class OrderBloc extends BaseBloc {
               listProductDTO[i].dateCreated,
               listProductDTO[i].dateUpdated));
         }
-        print("order bloc : dateCreated = ${ element.dateCreated}");
         listCart.add(Cart(element.id, listProduct, element.idUser, element.price, element.dateCreated));
 
       });
-      listCart.forEach((element) {print("element ${element.toString()}");});
       _streamController.sink.add(listCart);
     } catch (e) {
       print(e.toString());
