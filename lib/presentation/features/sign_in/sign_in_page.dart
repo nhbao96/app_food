@@ -85,8 +85,8 @@ class _SignInContainerState extends State<_SignInContainer> {
                         _buildEmailTextField(emailController),
                         _buildPasswordTextField(passwordController),
                         _buildButtonSignIn(onPress: () {
-                          String email = /*emailController.text.toString()*/"baonh@gmail.com";
-                          String password =/* passwordController.text.toString()*/"123456789";
+                          String email = emailController.text.toString();
+                          String password = passwordController.text.toString();
 
                           if (email.isEmpty || password.isEmpty) {
                             showMessage(
